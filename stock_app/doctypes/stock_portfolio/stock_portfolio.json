@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:portfolio_name",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "portfolio_name",
+  "trader",
+  "description",
+  "column_break_1",
+  "total_invested",
+  "current_value",
+  "profit_loss",
+  "profit_loss_percent",
+  "section_break_holdings",
+  "holdings"
+ ],
+ "fields": [
+  {
+   "fieldname": "portfolio_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Portfolio Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "trader",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Trader",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_invested",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Invested",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_value",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Current Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "profit_loss",
+   "fieldtype": "Currency",
+   "label": "Profit / Loss",
+   "read_only": 1
+  },
+  {
+   "fieldname": "profit_loss_percent",
+   "fieldtype": "Percent",
+   "label": "Profit / Loss %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_holdings",
+   "fieldtype": "Section Break",
+   "label": "Holdings"
+  },
+  {
+   "fieldname": "holdings",
+   "fieldtype": "Table",
+   "label": "Holdings",
+   "options": "Stock Portfolio Holding"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Stock App",
+ "name": "Stock Portfolio",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock Trader",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Portfolio Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
