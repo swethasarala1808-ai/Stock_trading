@@ -1,0 +1,151 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "current_stage",
+  "application_date",
+  "kyc_completed_date",
+  "bank_linked_date",
+  "demat_linked_date",
+  "trading_activated_date",
+  "activated_by",
+  "col_break_140434226631552",
+  "rejection_reason",
+  "sec_break_140434226631680",
+  "checklist_kyc",
+  "checklist_bank",
+  "checklist_demat",
+  "checklist_nominee",
+  "checklist_poa",
+  "checklist_income_proof",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "current_stage",
+   "fieldtype": "Select",
+   "label": "Current Stage",
+   "options": "Application\nKYC\nBank Linking\nDemat Linking\nDocument Review\nCompliance Check\nActivated\nRejected",
+   "in_list_view": 1,
+   "default": "Application"
+  },
+  {
+   "fieldname": "application_date",
+   "fieldtype": "Date",
+   "label": "Application Date"
+  },
+  {
+   "fieldname": "kyc_completed_date",
+   "fieldtype": "Date",
+   "label": "KYC Completed"
+  },
+  {
+   "fieldname": "bank_linked_date",
+   "fieldtype": "Date",
+   "label": "Bank Linked"
+  },
+  {
+   "fieldname": "demat_linked_date",
+   "fieldtype": "Date",
+   "label": "Demat Linked"
+  },
+  {
+   "fieldname": "trading_activated_date",
+   "fieldtype": "Date",
+   "label": "Trading Activated"
+  },
+  {
+   "fieldname": "activated_by",
+   "fieldtype": "Data",
+   "label": "Activated By"
+  },
+  {
+   "fieldname": "col_break_140434226631552",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rejection_reason",
+   "fieldtype": "Small Text",
+   "label": "Rejection Reason"
+  },
+  {
+   "fieldname": "sec_break_140434226631680",
+   "fieldtype": "Section Break",
+   "label": "Checklist"
+  },
+  {
+   "fieldname": "checklist_kyc",
+   "fieldtype": "Check",
+   "label": "KYC Complete"
+  },
+  {
+   "fieldname": "checklist_bank",
+   "fieldtype": "Check",
+   "label": "Bank Linked"
+  },
+  {
+   "fieldname": "checklist_demat",
+   "fieldtype": "Check",
+   "label": "Demat Linked"
+  },
+  {
+   "fieldname": "checklist_nominee",
+   "fieldtype": "Check",
+   "label": "Nominee Added"
+  },
+  {
+   "fieldname": "checklist_poa",
+   "fieldtype": "Check",
+   "label": "POA Received"
+  },
+  {
+   "fieldname": "checklist_income_proof",
+   "fieldtype": "Check",
+   "label": "Income Proof Submitted"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Account Activation",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SACT-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

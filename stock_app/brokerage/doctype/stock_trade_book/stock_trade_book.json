@@ -1,0 +1,242 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "trade_date",
+  "trade_time",
+  "symbol",
+  "company_name",
+  "exchange",
+  "segment",
+  "trade_type",
+  "product_type",
+  "isin",
+  "col_break_140434226599296",
+  "quantity",
+  "price",
+  "trade_value",
+  "sec_break_140434226599552",
+  "brokerage",
+  "stt",
+  "exchange_charges",
+  "clearing_charges",
+  "sebi_charges",
+  "stamp_duty",
+  "gst",
+  "dp_charges",
+  "total_charges",
+  "net_amount",
+  "sec_break_140434226600256",
+  "order_id",
+  "trade_id",
+  "settlement_number",
+  "settlement_date",
+  "exchange_trade_id",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "trade_date",
+   "fieldtype": "Date",
+   "label": "Trade Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "trade_time",
+   "fieldtype": "Time",
+   "label": "Trade Time"
+  },
+  {
+   "fieldname": "symbol",
+   "fieldtype": "Data",
+   "label": "Symbol",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name"
+  },
+  {
+   "fieldname": "exchange",
+   "fieldtype": "Data",
+   "label": "Exchange",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "segment",
+   "fieldtype": "Select",
+   "label": "Segment",
+   "options": "Equity\nF&O\nCurrency\nCommodity"
+  },
+  {
+   "fieldname": "trade_type",
+   "fieldtype": "Select",
+   "label": "Trade Type",
+   "options": "Buy\nSell",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "product_type",
+   "fieldtype": "Data",
+   "label": "Product Type"
+  },
+  {
+   "fieldname": "isin",
+   "fieldtype": "Data",
+   "label": "ISIN"
+  },
+  {
+   "fieldname": "col_break_140434226599296",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "label": "Quantity",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "trade_value",
+   "fieldtype": "Currency",
+   "label": "Trade Value"
+  },
+  {
+   "fieldname": "sec_break_140434226599552",
+   "fieldtype": "Section Break",
+   "label": "Charges"
+  },
+  {
+   "fieldname": "brokerage",
+   "fieldtype": "Currency",
+   "label": "Brokerage"
+  },
+  {
+   "fieldname": "stt",
+   "fieldtype": "Currency",
+   "label": "STT"
+  },
+  {
+   "fieldname": "exchange_charges",
+   "fieldtype": "Currency",
+   "label": "Exchange Charges"
+  },
+  {
+   "fieldname": "clearing_charges",
+   "fieldtype": "Currency",
+   "label": "Clearing Charges"
+  },
+  {
+   "fieldname": "sebi_charges",
+   "fieldtype": "Currency",
+   "label": "SEBI Charges"
+  },
+  {
+   "fieldname": "stamp_duty",
+   "fieldtype": "Currency",
+   "label": "Stamp Duty"
+  },
+  {
+   "fieldname": "gst",
+   "fieldtype": "Currency",
+   "label": "GST"
+  },
+  {
+   "fieldname": "dp_charges",
+   "fieldtype": "Currency",
+   "label": "DP Charges"
+  },
+  {
+   "fieldname": "total_charges",
+   "fieldtype": "Currency",
+   "label": "Total Charges"
+  },
+  {
+   "fieldname": "net_amount",
+   "fieldtype": "Currency",
+   "label": "Net Amount"
+  },
+  {
+   "fieldname": "sec_break_140434226600256",
+   "fieldtype": "Section Break",
+   "label": "References"
+  },
+  {
+   "fieldname": "order_id",
+   "fieldtype": "Data",
+   "label": "Order ID"
+  },
+  {
+   "fieldname": "trade_id",
+   "fieldtype": "Data",
+   "label": "Trade ID"
+  },
+  {
+   "fieldname": "settlement_number",
+   "fieldtype": "Data",
+   "label": "Settlement Number"
+  },
+  {
+   "fieldname": "settlement_date",
+   "fieldtype": "Date",
+   "label": "Settlement Date"
+  },
+  {
+   "fieldname": "exchange_trade_id",
+   "fieldtype": "Data",
+   "label": "Exchange Trade ID"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Trade Book",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "STRD-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

@@ -1,0 +1,149 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "charge_date",
+  "debit_type",
+  "isin",
+  "company_name",
+  "quantity",
+  "col_break_140434226685120",
+  "charge_per_script",
+  "total_charge",
+  "gst",
+  "net_charge",
+  "settlement_number",
+  "dp_id",
+  "client_id",
+  "deducted",
+  "deduction_date",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "charge_date",
+   "fieldtype": "Date",
+   "label": "Charge Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "debit_type",
+   "fieldtype": "Select",
+   "label": "Debit Type",
+   "options": "Sell\nPledge\nTransmission\nDIS\nOff Market",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "isin",
+   "fieldtype": "Data",
+   "label": "ISIN"
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "col_break_140434226685120",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "charge_per_script",
+   "fieldtype": "Currency",
+   "label": "Charge per Script"
+  },
+  {
+   "fieldname": "total_charge",
+   "fieldtype": "Currency",
+   "label": "Total Charge",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "gst",
+   "fieldtype": "Currency",
+   "label": "GST"
+  },
+  {
+   "fieldname": "net_charge",
+   "fieldtype": "Currency",
+   "label": "Net Charge",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "settlement_number",
+   "fieldtype": "Data",
+   "label": "Settlement Number"
+  },
+  {
+   "fieldname": "dp_id",
+   "fieldtype": "Data",
+   "label": "DP ID"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "deducted",
+   "fieldtype": "Check",
+   "label": "Deducted"
+  },
+  {
+   "fieldname": "deduction_date",
+   "fieldtype": "Date",
+   "label": "Deduction Date"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock DP Charge",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SDPC-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

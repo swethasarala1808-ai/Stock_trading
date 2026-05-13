@@ -1,0 +1,124 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "exchange_name",
+  "exchange_code",
+  "segment",
+  "connection_type",
+  "api_endpoint",
+  "api_key",
+  "col_break_140434226602304",
+  "is_active",
+  "connection_status",
+  "last_connected",
+  "latency_ms",
+  "orders_per_second_limit",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "exchange_name",
+   "fieldtype": "Data",
+   "label": "Exchange Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "exchange_code",
+   "fieldtype": "Data",
+   "label": "Exchange Code",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "segment",
+   "fieldtype": "Select",
+   "label": "Segment",
+   "options": "Equity\nF&O\nCurrency\nCommodity"
+  },
+  {
+   "fieldname": "connection_type",
+   "fieldtype": "Select",
+   "label": "Connection Type",
+   "options": "API\nFIX Protocol\nCTCL\nDMA"
+  },
+  {
+   "fieldname": "api_endpoint",
+   "fieldtype": "Data",
+   "label": "API Endpoint"
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key"
+  },
+  {
+   "fieldname": "col_break_140434226602304",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "connection_status",
+   "fieldtype": "Select",
+   "label": "Connection Status",
+   "options": "Connected\nDisconnected\nError",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_connected",
+   "fieldtype": "Datetime",
+   "label": "Last Connected"
+  },
+  {
+   "fieldname": "latency_ms",
+   "fieldtype": "Float",
+   "label": "Latency (ms)"
+  },
+  {
+   "fieldname": "orders_per_second_limit",
+   "fieldtype": "Int",
+   "label": "Orders/Second Limit"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Exchange Connectivity",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "field:exchange_name",
+ "naming_rule": "By fieldname"
+}

@@ -1,0 +1,203 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "position_date",
+  "symbol",
+  "exchange",
+  "segment",
+  "instrument_type",
+  "col_break_140434226635328",
+  "expiry_date",
+  "strike_price",
+  "option_type",
+  "trade_type",
+  "quantity",
+  "lot_size",
+  "avg_cost_price",
+  "current_market_price",
+  "mtm_value",
+  "unrealized_pnl",
+  "realized_pnl",
+  "total_pnl",
+  "margin_required",
+  "brokerage_estimate",
+  "status",
+  "square_off_price",
+  "square_off_time",
+  "square_off_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "position_date",
+   "fieldtype": "Date",
+   "label": "Position Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "symbol",
+   "fieldtype": "Data",
+   "label": "Symbol",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "exchange",
+   "fieldtype": "Data",
+   "label": "Exchange"
+  },
+  {
+   "fieldname": "segment",
+   "fieldtype": "Data",
+   "label": "Segment"
+  },
+  {
+   "fieldname": "instrument_type",
+   "fieldtype": "Data",
+   "label": "Instrument Type"
+  },
+  {
+   "fieldname": "col_break_140434226635328",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expiry_date",
+   "fieldtype": "Date",
+   "label": "Expiry Date"
+  },
+  {
+   "fieldname": "strike_price",
+   "fieldtype": "Float",
+   "label": "Strike Price"
+  },
+  {
+   "fieldname": "option_type",
+   "fieldtype": "Select",
+   "label": "Option Type",
+   "options": "CE\nPE\nNA"
+  },
+  {
+   "fieldname": "trade_type",
+   "fieldtype": "Select",
+   "label": "Trade Type",
+   "options": "Long\nShort"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "label": "Quantity",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "lot_size",
+   "fieldtype": "Int",
+   "label": "Lot Size"
+  },
+  {
+   "fieldname": "avg_cost_price",
+   "fieldtype": "Currency",
+   "label": "Avg Cost Price"
+  },
+  {
+   "fieldname": "current_market_price",
+   "fieldtype": "Currency",
+   "label": "CMP",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mtm_value",
+   "fieldtype": "Currency",
+   "label": "MTM Value"
+  },
+  {
+   "fieldname": "unrealized_pnl",
+   "fieldtype": "Currency",
+   "label": "Unrealized P&L",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "realized_pnl",
+   "fieldtype": "Currency",
+   "label": "Realized P&L"
+  },
+  {
+   "fieldname": "total_pnl",
+   "fieldtype": "Currency",
+   "label": "Total P&L",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "margin_required",
+   "fieldtype": "Currency",
+   "label": "Margin Required"
+  },
+  {
+   "fieldname": "brokerage_estimate",
+   "fieldtype": "Currency",
+   "label": "Brokerage Est."
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nSquared Off\nExpired",
+   "in_list_view": 1,
+   "default": "Open"
+  },
+  {
+   "fieldname": "square_off_price",
+   "fieldtype": "Currency",
+   "label": "Square-Off Price"
+  },
+  {
+   "fieldname": "square_off_time",
+   "fieldtype": "Datetime",
+   "label": "Square-Off Time"
+  },
+  {
+   "fieldname": "square_off_type",
+   "fieldtype": "Select",
+   "label": "Square-Off Type",
+   "options": "Manual\nAuto\nExpiry"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock MTM Position",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SMTM-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

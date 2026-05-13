@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "rm_name",
+  "email",
+  "phone",
+  "employee_id",
+  "designation",
+  "branch",
+  "col_break_140434226690176",
+  "clients_assigned",
+  "total_aum_managed",
+  "monthly_target",
+  "monthly_achieved",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "rm_name",
+   "fieldtype": "Data",
+   "label": "RM Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "employee_id",
+   "fieldtype": "Data",
+   "label": "Employee ID"
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Select",
+   "label": "Designation",
+   "options": "Relationship Manager\nSenior RM\nBranch Manager\nDealer\nSupport",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "label": "Branch"
+  },
+  {
+   "fieldname": "col_break_140434226690176",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "clients_assigned",
+   "fieldtype": "Int",
+   "label": "Clients Assigned"
+  },
+  {
+   "fieldname": "total_aum_managed",
+   "fieldtype": "Currency",
+   "label": "Total AUM Managed"
+  },
+  {
+   "fieldname": "monthly_target",
+   "fieldtype": "Currency",
+   "label": "Monthly Target"
+  },
+  {
+   "fieldname": "monthly_achieved",
+   "fieldtype": "Currency",
+   "label": "Monthly Achieved"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Relationship Manager",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "field:rm_name",
+ "naming_rule": "By fieldname"
+}

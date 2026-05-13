@@ -1,0 +1,247 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "client_pan",
+  "client_gstin",
+  "invoice_number",
+  "invoice_date",
+  "invoice_period_from",
+  "invoice_period_to",
+  "sec_break_140434226679488",
+  "brokerage_amount",
+  "dp_charges",
+  "account_maintenance_charges",
+  "advisory_fee",
+  "margin_interest",
+  "other_charges",
+  "subtotal",
+  "sec_break_140434226679936",
+  "igst_amount",
+  "cgst_amount",
+  "sgst_amount",
+  "total_gst",
+  "total_amount",
+  "hsn_sac_code",
+  "place_of_supply",
+  "is_igst",
+  "sec_break_140434226680512",
+  "payment_status",
+  "paid_amount",
+  "balance_due",
+  "payment_date",
+  "payment_method",
+  "transaction_reference",
+  "pdf_generated",
+  "sent_to_client"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "client_pan",
+   "fieldtype": "Data",
+   "label": "Client PAN"
+  },
+  {
+   "fieldname": "client_gstin",
+   "fieldtype": "Data",
+   "label": "Client GSTIN"
+  },
+  {
+   "fieldname": "invoice_number",
+   "fieldtype": "Data",
+   "label": "Invoice Number",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "invoice_date",
+   "fieldtype": "Date",
+   "label": "Invoice Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "invoice_period_from",
+   "fieldtype": "Date",
+   "label": "Period From"
+  },
+  {
+   "fieldname": "invoice_period_to",
+   "fieldtype": "Date",
+   "label": "Period To"
+  },
+  {
+   "fieldname": "sec_break_140434226679488",
+   "fieldtype": "Section Break",
+   "label": "Charges"
+  },
+  {
+   "fieldname": "brokerage_amount",
+   "fieldtype": "Currency",
+   "label": "Brokerage"
+  },
+  {
+   "fieldname": "dp_charges",
+   "fieldtype": "Currency",
+   "label": "DP Charges"
+  },
+  {
+   "fieldname": "account_maintenance_charges",
+   "fieldtype": "Currency",
+   "label": "AMC"
+  },
+  {
+   "fieldname": "advisory_fee",
+   "fieldtype": "Currency",
+   "label": "Advisory Fee"
+  },
+  {
+   "fieldname": "margin_interest",
+   "fieldtype": "Currency",
+   "label": "Margin Interest"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charges"
+  },
+  {
+   "fieldname": "subtotal",
+   "fieldtype": "Currency",
+   "label": "Subtotal"
+  },
+  {
+   "fieldname": "sec_break_140434226679936",
+   "fieldtype": "Section Break",
+   "label": "GST"
+  },
+  {
+   "fieldname": "igst_amount",
+   "fieldtype": "Currency",
+   "label": "IGST"
+  },
+  {
+   "fieldname": "cgst_amount",
+   "fieldtype": "Currency",
+   "label": "CGST"
+  },
+  {
+   "fieldname": "sgst_amount",
+   "fieldtype": "Currency",
+   "label": "SGST"
+  },
+  {
+   "fieldname": "total_gst",
+   "fieldtype": "Currency",
+   "label": "Total GST"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "hsn_sac_code",
+   "fieldtype": "Data",
+   "label": "HSN/SAC Code"
+  },
+  {
+   "fieldname": "place_of_supply",
+   "fieldtype": "Data",
+   "label": "Place of Supply"
+  },
+  {
+   "fieldname": "is_igst",
+   "fieldtype": "Check",
+   "label": "Is IGST"
+  },
+  {
+   "fieldname": "sec_break_140434226680512",
+   "fieldtype": "Section Break",
+   "label": "Payment"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Paid\nUnpaid\nPartially Paid\nOverdue",
+   "in_list_view": 1,
+   "default": "Unpaid"
+  },
+  {
+   "fieldname": "paid_amount",
+   "fieldtype": "Currency",
+   "label": "Paid Amount"
+  },
+  {
+   "fieldname": "balance_due",
+   "fieldtype": "Currency",
+   "label": "Balance Due"
+  },
+  {
+   "fieldname": "payment_date",
+   "fieldtype": "Date",
+   "label": "Payment Date"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "label": "Payment Method",
+   "options": "NEFT\nRTGS\nUPI\nCheque\nAuto Debit"
+  },
+  {
+   "fieldname": "transaction_reference",
+   "fieldtype": "Data",
+   "label": "Transaction Reference"
+  },
+  {
+   "fieldname": "pdf_generated",
+   "fieldtype": "Check",
+   "label": "PDF Generated"
+  },
+  {
+   "fieldname": "sent_to_client",
+   "fieldtype": "Check",
+   "label": "Sent to Client"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Tax Invoice",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SINV-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

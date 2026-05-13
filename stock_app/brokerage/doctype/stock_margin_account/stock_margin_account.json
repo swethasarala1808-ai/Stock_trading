@@ -1,0 +1,232 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "margin_date",
+  "sec_break_140434226632768",
+  "cash_component",
+  "stock_collateral",
+  "mutual_fund_collateral",
+  "fd_collateral",
+  "total_collateral_value",
+  "haircut_amount",
+  "net_collateral",
+  "sec_break_140434226633280",
+  "span_margin",
+  "exposure_margin",
+  "var_margin",
+  "elm_margin",
+  "additional_margin",
+  "adhoc_margin",
+  "total_margin_required",
+  "margin_available",
+  "margin_used",
+  "free_margin",
+  "margin_utilization_percent",
+  "sec_break_140434226634048",
+  "peak_margin_utilized",
+  "peak_margin_date",
+  "shortfall_amount",
+  "is_margin_call",
+  "margin_call_amount",
+  "margin_call_sent",
+  "auto_square_off_triggered",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "margin_date",
+   "fieldtype": "Date",
+   "label": "Margin Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_break_140434226632768",
+   "fieldtype": "Section Break",
+   "label": "Collateral"
+  },
+  {
+   "fieldname": "cash_component",
+   "fieldtype": "Currency",
+   "label": "Cash Component"
+  },
+  {
+   "fieldname": "stock_collateral",
+   "fieldtype": "Currency",
+   "label": "Stock Collateral"
+  },
+  {
+   "fieldname": "mutual_fund_collateral",
+   "fieldtype": "Currency",
+   "label": "MF Collateral"
+  },
+  {
+   "fieldname": "fd_collateral",
+   "fieldtype": "Currency",
+   "label": "FD Collateral"
+  },
+  {
+   "fieldname": "total_collateral_value",
+   "fieldtype": "Currency",
+   "label": "Total Collateral"
+  },
+  {
+   "fieldname": "haircut_amount",
+   "fieldtype": "Currency",
+   "label": "Haircut Amount"
+  },
+  {
+   "fieldname": "net_collateral",
+   "fieldtype": "Currency",
+   "label": "Net Collateral"
+  },
+  {
+   "fieldname": "sec_break_140434226633280",
+   "fieldtype": "Section Break",
+   "label": "Margin Requirement"
+  },
+  {
+   "fieldname": "span_margin",
+   "fieldtype": "Currency",
+   "label": "SPAN Margin"
+  },
+  {
+   "fieldname": "exposure_margin",
+   "fieldtype": "Currency",
+   "label": "Exposure Margin"
+  },
+  {
+   "fieldname": "var_margin",
+   "fieldtype": "Currency",
+   "label": "VAR Margin"
+  },
+  {
+   "fieldname": "elm_margin",
+   "fieldtype": "Currency",
+   "label": "ELM Margin"
+  },
+  {
+   "fieldname": "additional_margin",
+   "fieldtype": "Currency",
+   "label": "Additional Margin"
+  },
+  {
+   "fieldname": "adhoc_margin",
+   "fieldtype": "Currency",
+   "label": "Adhoc Margin"
+  },
+  {
+   "fieldname": "total_margin_required",
+   "fieldtype": "Currency",
+   "label": "Total Required",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "margin_available",
+   "fieldtype": "Currency",
+   "label": "Margin Available",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "margin_used",
+   "fieldtype": "Currency",
+   "label": "Margin Used"
+  },
+  {
+   "fieldname": "free_margin",
+   "fieldtype": "Currency",
+   "label": "Free Margin"
+  },
+  {
+   "fieldname": "margin_utilization_percent",
+   "fieldtype": "Float",
+   "label": "Utilization %",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_break_140434226634048",
+   "fieldtype": "Section Break",
+   "label": "Peak Margin & Calls"
+  },
+  {
+   "fieldname": "peak_margin_utilized",
+   "fieldtype": "Currency",
+   "label": "Peak Margin Utilized"
+  },
+  {
+   "fieldname": "peak_margin_date",
+   "fieldtype": "Date",
+   "label": "Peak Margin Date"
+  },
+  {
+   "fieldname": "shortfall_amount",
+   "fieldtype": "Currency",
+   "label": "Shortfall"
+  },
+  {
+   "fieldname": "is_margin_call",
+   "fieldtype": "Check",
+   "label": "Margin Call Triggered"
+  },
+  {
+   "fieldname": "margin_call_amount",
+   "fieldtype": "Currency",
+   "label": "Margin Call Amount"
+  },
+  {
+   "fieldname": "margin_call_sent",
+   "fieldtype": "Check",
+   "label": "Margin Call Sent"
+  },
+  {
+   "fieldname": "auto_square_off_triggered",
+   "fieldtype": "Check",
+   "label": "Auto Square-Off Triggered"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Margin Account",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SMRG-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

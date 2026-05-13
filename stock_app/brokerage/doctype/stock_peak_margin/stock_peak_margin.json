@@ -1,0 +1,146 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "trade_date",
+  "segment",
+  "exchange",
+  "snapshot_time",
+  "col_break_140434226638976",
+  "margin_required_at_snapshot",
+  "margin_available_at_snapshot",
+  "shortfall_at_snapshot",
+  "peak_margin_required",
+  "peak_margin_available",
+  "peak_shortfall",
+  "penalty_applicable",
+  "penalty_amount",
+  "penalty_rate_percent",
+  "sebi_circular_reference",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "trade_date",
+   "fieldtype": "Date",
+   "label": "Trade Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "segment",
+   "fieldtype": "Data",
+   "label": "Segment"
+  },
+  {
+   "fieldname": "exchange",
+   "fieldtype": "Data",
+   "label": "Exchange"
+  },
+  {
+   "fieldname": "snapshot_time",
+   "fieldtype": "Time",
+   "label": "Snapshot Time"
+  },
+  {
+   "fieldname": "col_break_140434226638976",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "margin_required_at_snapshot",
+   "fieldtype": "Currency",
+   "label": "Required at Snapshot"
+  },
+  {
+   "fieldname": "margin_available_at_snapshot",
+   "fieldtype": "Currency",
+   "label": "Available at Snapshot"
+  },
+  {
+   "fieldname": "shortfall_at_snapshot",
+   "fieldtype": "Currency",
+   "label": "Shortfall at Snapshot"
+  },
+  {
+   "fieldname": "peak_margin_required",
+   "fieldtype": "Currency",
+   "label": "Peak Margin Required",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "peak_margin_available",
+   "fieldtype": "Currency",
+   "label": "Peak Margin Available"
+  },
+  {
+   "fieldname": "peak_shortfall",
+   "fieldtype": "Currency",
+   "label": "Peak Shortfall",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "penalty_applicable",
+   "fieldtype": "Check",
+   "label": "Penalty Applicable"
+  },
+  {
+   "fieldname": "penalty_amount",
+   "fieldtype": "Currency",
+   "label": "Penalty Amount"
+  },
+  {
+   "fieldname": "penalty_rate_percent",
+   "fieldtype": "Float",
+   "label": "Penalty Rate %"
+  },
+  {
+   "fieldname": "sebi_circular_reference",
+   "fieldtype": "Data",
+   "label": "SEBI Circular Reference"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Peak Margin",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SPMG-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

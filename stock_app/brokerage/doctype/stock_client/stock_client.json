@@ -1,0 +1,326 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "full_name",
+  "email",
+  "phone",
+  "alternate_phone",
+  "date_of_birth",
+  "gender",
+  "pan_number",
+  "aadhaar_number",
+  "col_break_140434226603200",
+  "account_status",
+  "client_type",
+  "risk_profile",
+  "relationship_manager",
+  "onboarding_date",
+  "activation_date",
+  "sec_break_140434226603584",
+  "father_name",
+  "mother_name",
+  "marital_status",
+  "nationality",
+  "occupation",
+  "annual_income",
+  "sec_break_140434226604032",
+  "address",
+  "city",
+  "state",
+  "pincode",
+  "country",
+  "sec_break_140434226604416",
+  "trading_account_number",
+  "demat_account_number",
+  "dp_id",
+  "dp_name",
+  "client_id",
+  "poa_given",
+  "nominee_added",
+  "sec_break_140434226604928",
+  "total_aum",
+  "available_cash",
+  "used_margin",
+  "portfolio_value",
+  "total_pnl",
+  "last_login",
+  "is_active",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "alternate_phone",
+   "fieldtype": "Data",
+   "label": "Alternate Phone"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "Male\nFemale\nOther"
+  },
+  {
+   "fieldname": "pan_number",
+   "fieldtype": "Data",
+   "label": "PAN Number",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "aadhaar_number",
+   "fieldtype": "Data",
+   "label": "Aadhaar Number"
+  },
+  {
+   "fieldname": "col_break_140434226603200",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "account_status",
+   "fieldtype": "Select",
+   "label": "Account Status",
+   "options": "Application Received\nKYC Pending\nKYC Verified\nAccount Active\nAccount Suspended\nAccount Closed",
+   "in_list_view": 1,
+   "default": "Application Received"
+  },
+  {
+   "fieldname": "client_type",
+   "fieldtype": "Select",
+   "label": "Client Type",
+   "options": "Individual\nHUF\nCorporate\nNRI\nFPI"
+  },
+  {
+   "fieldname": "risk_profile",
+   "fieldtype": "Select",
+   "label": "Risk Profile",
+   "options": "Conservative\nModerate\nAggressive\nVery Aggressive"
+  },
+  {
+   "fieldname": "relationship_manager",
+   "fieldtype": "Data",
+   "label": "Relationship Manager",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "onboarding_date",
+   "fieldtype": "Date",
+   "label": "Onboarding Date"
+  },
+  {
+   "fieldname": "activation_date",
+   "fieldtype": "Date",
+   "label": "Activation Date"
+  },
+  {
+   "fieldname": "sec_break_140434226603584",
+   "fieldtype": "Section Break",
+   "label": "Personal Details"
+  },
+  {
+   "fieldname": "father_name",
+   "fieldtype": "Data",
+   "label": "Father Name"
+  },
+  {
+   "fieldname": "mother_name",
+   "fieldtype": "Data",
+   "label": "Mother Name"
+  },
+  {
+   "fieldname": "marital_status",
+   "fieldtype": "Select",
+   "label": "Marital Status",
+   "options": "Single\nMarried\nDivorced\nWidowed"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Data",
+   "label": "Nationality"
+  },
+  {
+   "fieldname": "occupation",
+   "fieldtype": "Select",
+   "label": "Occupation",
+   "options": "Salaried\nBusiness\nSelf Employed\nRetired\nStudent\nOther"
+  },
+  {
+   "fieldname": "annual_income",
+   "fieldtype": "Select",
+   "label": "Annual Income",
+   "options": "Below 1L\n1L-5L\n5L-10L\n10L-25L\n25L-50L\nAbove 50L"
+  },
+  {
+   "fieldname": "sec_break_140434226604032",
+   "fieldtype": "Section Break",
+   "label": "Address"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Data",
+   "label": "Country",
+   "default": "India"
+  },
+  {
+   "fieldname": "sec_break_140434226604416",
+   "fieldtype": "Section Break",
+   "label": "Account Details"
+  },
+  {
+   "fieldname": "trading_account_number",
+   "fieldtype": "Data",
+   "label": "Trading Account Number"
+  },
+  {
+   "fieldname": "demat_account_number",
+   "fieldtype": "Data",
+   "label": "Demat Account Number"
+  },
+  {
+   "fieldname": "dp_id",
+   "fieldtype": "Data",
+   "label": "DP ID"
+  },
+  {
+   "fieldname": "dp_name",
+   "fieldtype": "Data",
+   "label": "DP Name"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "poa_given",
+   "fieldtype": "Check",
+   "label": "POA Given"
+  },
+  {
+   "fieldname": "nominee_added",
+   "fieldtype": "Check",
+   "label": "Nominee Added"
+  },
+  {
+   "fieldname": "sec_break_140434226604928",
+   "fieldtype": "Section Break",
+   "label": "Portfolio Summary"
+  },
+  {
+   "fieldname": "total_aum",
+   "fieldtype": "Currency",
+   "label": "Total AUM"
+  },
+  {
+   "fieldname": "available_cash",
+   "fieldtype": "Currency",
+   "label": "Available Cash"
+  },
+  {
+   "fieldname": "used_margin",
+   "fieldtype": "Currency",
+   "label": "Used Margin"
+  },
+  {
+   "fieldname": "portfolio_value",
+   "fieldtype": "Currency",
+   "label": "Portfolio Value"
+  },
+  {
+   "fieldname": "total_pnl",
+   "fieldtype": "Currency",
+   "label": "Total P&L"
+  },
+  {
+   "fieldname": "last_login",
+   "fieldtype": "Datetime",
+   "label": "Last Login"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Client",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SCLI-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

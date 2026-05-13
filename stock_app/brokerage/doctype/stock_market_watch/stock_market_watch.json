@@ -1,0 +1,270 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "symbol",
+  "company_name",
+  "exchange",
+  "instrument_type",
+  "sector",
+  "isin",
+  "col_break_140434226594304",
+  "last_price",
+  "open_price",
+  "high_price",
+  "low_price",
+  "close_price",
+  "prev_close",
+  "day_change",
+  "day_change_percent",
+  "sec_break_140434226595072",
+  "volume",
+  "market_cap",
+  "pe_ratio",
+  "pb_ratio",
+  "eps",
+  "dividend_yield",
+  "col_break_140434226595520",
+  "fifty_two_week_high",
+  "fifty_two_week_low",
+  "circuit_high",
+  "circuit_low",
+  "bid_price",
+  "ask_price",
+  "bid_qty",
+  "ask_qty",
+  "total_buy_qty",
+  "total_sell_qty",
+  "sec_break_140434226596224",
+  "is_index",
+  "is_active",
+  "last_updated"
+ ],
+ "fields": [
+  {
+   "fieldname": "symbol",
+   "fieldtype": "Data",
+   "label": "Symbol",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "exchange",
+   "fieldtype": "Select",
+   "label": "Exchange",
+   "options": "NSE\nBSE\nNSE+BSE",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "instrument_type",
+   "fieldtype": "Select",
+   "label": "Instrument Type",
+   "options": "Equity\nETF\nMutual Fund\nF&O\nCurrency\nCommodity"
+  },
+  {
+   "fieldname": "sector",
+   "fieldtype": "Select",
+   "label": "Sector",
+   "options": "Banking\nIT\nPharma\nAuto\nEnergy\nFMCG\nMetal\nRealty\nInfrastructure\nOther"
+  },
+  {
+   "fieldname": "isin",
+   "fieldtype": "Data",
+   "label": "ISIN"
+  },
+  {
+   "fieldname": "col_break_140434226594304",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_price",
+   "fieldtype": "Float",
+   "label": "Last Price",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "open_price",
+   "fieldtype": "Float",
+   "label": "Open"
+  },
+  {
+   "fieldname": "high_price",
+   "fieldtype": "Float",
+   "label": "High"
+  },
+  {
+   "fieldname": "low_price",
+   "fieldtype": "Float",
+   "label": "Low"
+  },
+  {
+   "fieldname": "close_price",
+   "fieldtype": "Float",
+   "label": "Close"
+  },
+  {
+   "fieldname": "prev_close",
+   "fieldtype": "Float",
+   "label": "Prev Close"
+  },
+  {
+   "fieldname": "day_change",
+   "fieldtype": "Float",
+   "label": "Day Change",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "day_change_percent",
+   "fieldtype": "Float",
+   "label": "Change %",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_break_140434226595072",
+   "fieldtype": "Section Break",
+   "label": "Volume & Market"
+  },
+  {
+   "fieldname": "volume",
+   "fieldtype": "Int",
+   "label": "Volume"
+  },
+  {
+   "fieldname": "market_cap",
+   "fieldtype": "Float",
+   "label": "Market Cap"
+  },
+  {
+   "fieldname": "pe_ratio",
+   "fieldtype": "Float",
+   "label": "P/E Ratio"
+  },
+  {
+   "fieldname": "pb_ratio",
+   "fieldtype": "Float",
+   "label": "P/B Ratio"
+  },
+  {
+   "fieldname": "eps",
+   "fieldtype": "Float",
+   "label": "EPS"
+  },
+  {
+   "fieldname": "dividend_yield",
+   "fieldtype": "Float",
+   "label": "Dividend Yield"
+  },
+  {
+   "fieldname": "col_break_140434226595520",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fifty_two_week_high",
+   "fieldtype": "Float",
+   "label": "52W High"
+  },
+  {
+   "fieldname": "fifty_two_week_low",
+   "fieldtype": "Float",
+   "label": "52W Low"
+  },
+  {
+   "fieldname": "circuit_high",
+   "fieldtype": "Float",
+   "label": "Circuit High"
+  },
+  {
+   "fieldname": "circuit_low",
+   "fieldtype": "Float",
+   "label": "Circuit Low"
+  },
+  {
+   "fieldname": "bid_price",
+   "fieldtype": "Float",
+   "label": "Bid Price"
+  },
+  {
+   "fieldname": "ask_price",
+   "fieldtype": "Float",
+   "label": "Ask Price"
+  },
+  {
+   "fieldname": "bid_qty",
+   "fieldtype": "Int",
+   "label": "Bid Qty"
+  },
+  {
+   "fieldname": "ask_qty",
+   "fieldtype": "Int",
+   "label": "Ask Qty"
+  },
+  {
+   "fieldname": "total_buy_qty",
+   "fieldtype": "Int",
+   "label": "Total Buy Qty"
+  },
+  {
+   "fieldname": "total_sell_qty",
+   "fieldtype": "Int",
+   "label": "Total Sell Qty"
+  },
+  {
+   "fieldname": "sec_break_140434226596224",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "is_index",
+   "fieldtype": "Check",
+   "label": "Is Index"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "last_updated",
+   "fieldtype": "Datetime",
+   "label": "Last Updated"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Market Watch",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "field:symbol",
+ "naming_rule": "By fieldname"
+}

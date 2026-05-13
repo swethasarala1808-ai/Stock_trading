@@ -1,0 +1,176 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "effective_date",
+  "cash_limit",
+  "intraday_limit_multiplier",
+  "intraday_limit",
+  "delivery_limit",
+  "col_break_140434226628288",
+  "f_and_o_limit",
+  "currency_limit",
+  "commodity_limit",
+  "total_limit",
+  "used_limit",
+  "available_limit",
+  "utilization_percent",
+  "sec_break_140434226628800",
+  "margin_available",
+  "margin_used",
+  "exposure_limit",
+  "exposure_used",
+  "last_updated",
+  "set_by",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "effective_date",
+   "fieldtype": "Date",
+   "label": "Effective Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cash_limit",
+   "fieldtype": "Currency",
+   "label": "Cash Limit",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "intraday_limit_multiplier",
+   "fieldtype": "Float",
+   "label": "Intraday Multiplier"
+  },
+  {
+   "fieldname": "intraday_limit",
+   "fieldtype": "Currency",
+   "label": "Intraday Limit"
+  },
+  {
+   "fieldname": "delivery_limit",
+   "fieldtype": "Currency",
+   "label": "Delivery Limit"
+  },
+  {
+   "fieldname": "col_break_140434226628288",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "f_and_o_limit",
+   "fieldtype": "Currency",
+   "label": "F&O Limit"
+  },
+  {
+   "fieldname": "currency_limit",
+   "fieldtype": "Currency",
+   "label": "Currency Limit"
+  },
+  {
+   "fieldname": "commodity_limit",
+   "fieldtype": "Currency",
+   "label": "Commodity Limit"
+  },
+  {
+   "fieldname": "total_limit",
+   "fieldtype": "Currency",
+   "label": "Total Limit",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "used_limit",
+   "fieldtype": "Currency",
+   "label": "Used Limit"
+  },
+  {
+   "fieldname": "available_limit",
+   "fieldtype": "Currency",
+   "label": "Available Limit"
+  },
+  {
+   "fieldname": "utilization_percent",
+   "fieldtype": "Float",
+   "label": "Utilization %",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_break_140434226628800",
+   "fieldtype": "Section Break",
+   "label": "Margin"
+  },
+  {
+   "fieldname": "margin_available",
+   "fieldtype": "Currency",
+   "label": "Margin Available"
+  },
+  {
+   "fieldname": "margin_used",
+   "fieldtype": "Currency",
+   "label": "Margin Used"
+  },
+  {
+   "fieldname": "exposure_limit",
+   "fieldtype": "Currency",
+   "label": "Exposure Limit"
+  },
+  {
+   "fieldname": "exposure_used",
+   "fieldtype": "Currency",
+   "label": "Exposure Used"
+  },
+  {
+   "fieldname": "last_updated",
+   "fieldtype": "Datetime",
+   "label": "Last Updated"
+  },
+  {
+   "fieldname": "set_by",
+   "fieldtype": "Data",
+   "label": "Set By"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Trading Limit",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SLIM-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

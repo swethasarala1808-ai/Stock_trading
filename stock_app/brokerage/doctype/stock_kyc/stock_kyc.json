@@ -1,0 +1,166 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "client_pan",
+  "kyc_date",
+  "kyc_type",
+  "kyc_status",
+  "col_break_140434226605888",
+  "verified_by",
+  "verified_on",
+  "rejection_reason",
+  "kyc_number",
+  "ckyc_number",
+  "expiry_date",
+  "sec_break_140434226606336",
+  "pan_verified",
+  "aadhaar_verified",
+  "address_verified",
+  "bank_verified",
+  "in_person_done",
+  "video_kyc_done",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "client_pan",
+   "fieldtype": "Data",
+   "label": "Client PAN",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "kyc_date",
+   "fieldtype": "Date",
+   "label": "KYC Date"
+  },
+  {
+   "fieldname": "kyc_type",
+   "fieldtype": "Select",
+   "label": "KYC Type",
+   "options": "CKYC\nIn-Person Verification\nVideo KYC\nDigiLocker"
+  },
+  {
+   "fieldname": "kyc_status",
+   "fieldtype": "Select",
+   "label": "KYC Status",
+   "options": "Pending\nDocuments Submitted\nUnder Review\nVerified\nRejected\nExpired\nRenewal Required",
+   "in_list_view": 1,
+   "default": "Pending"
+  },
+  {
+   "fieldname": "col_break_140434226605888",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "verified_by",
+   "fieldtype": "Data",
+   "label": "Verified By"
+  },
+  {
+   "fieldname": "verified_on",
+   "fieldtype": "Date",
+   "label": "Verified On"
+  },
+  {
+   "fieldname": "rejection_reason",
+   "fieldtype": "Small Text",
+   "label": "Rejection Reason"
+  },
+  {
+   "fieldname": "kyc_number",
+   "fieldtype": "Data",
+   "label": "KYC Number"
+  },
+  {
+   "fieldname": "ckyc_number",
+   "fieldtype": "Data",
+   "label": "CKYC Number"
+  },
+  {
+   "fieldname": "expiry_date",
+   "fieldtype": "Date",
+   "label": "Expiry Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_break_140434226606336",
+   "fieldtype": "Section Break",
+   "label": "Verification Checklist"
+  },
+  {
+   "fieldname": "pan_verified",
+   "fieldtype": "Check",
+   "label": "PAN Verified"
+  },
+  {
+   "fieldname": "aadhaar_verified",
+   "fieldtype": "Check",
+   "label": "Aadhaar Verified"
+  },
+  {
+   "fieldname": "address_verified",
+   "fieldtype": "Check",
+   "label": "Address Verified"
+  },
+  {
+   "fieldname": "bank_verified",
+   "fieldtype": "Check",
+   "label": "Bank Verified"
+  },
+  {
+   "fieldname": "in_person_done",
+   "fieldtype": "Check",
+   "label": "In-Person Done"
+  },
+  {
+   "fieldname": "video_kyc_done",
+   "fieldtype": "Check",
+   "label": "Video KYC Done"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock KYC",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SKYC-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

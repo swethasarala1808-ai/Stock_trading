@@ -1,0 +1,153 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "dp_name",
+  "dp_id",
+  "client_id",
+  "demat_account_number",
+  "account_type",
+  "col_break_140434226626752",
+  "poa_given",
+  "poa_expiry_date",
+  "tpin_set",
+  "ddpi_given",
+  "ddpi_expiry_date",
+  "is_active",
+  "opened_on",
+  "linked_bank_account",
+  "dematerialisation_enabled",
+  "pledging_enabled",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "dp_name",
+   "fieldtype": "Select",
+   "label": "DP Name",
+   "options": "CDSL\nNSDL",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "dp_id",
+   "fieldtype": "Data",
+   "label": "DP ID"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "demat_account_number",
+   "fieldtype": "Data",
+   "label": "Demat Account Number",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "account_type",
+   "fieldtype": "Select",
+   "label": "Account Type",
+   "options": "Regular\nBSDA\nCorporate"
+  },
+  {
+   "fieldname": "col_break_140434226626752",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "poa_given",
+   "fieldtype": "Check",
+   "label": "POA Given"
+  },
+  {
+   "fieldname": "poa_expiry_date",
+   "fieldtype": "Date",
+   "label": "POA Expiry Date"
+  },
+  {
+   "fieldname": "tpin_set",
+   "fieldtype": "Check",
+   "label": "TPIN Set"
+  },
+  {
+   "fieldname": "ddpi_given",
+   "fieldtype": "Check",
+   "label": "DDPI Given"
+  },
+  {
+   "fieldname": "ddpi_expiry_date",
+   "fieldtype": "Date",
+   "label": "DDPI Expiry Date"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "opened_on",
+   "fieldtype": "Date",
+   "label": "Opened On"
+  },
+  {
+   "fieldname": "linked_bank_account",
+   "fieldtype": "Data",
+   "label": "Linked Bank Account"
+  },
+  {
+   "fieldname": "dematerialisation_enabled",
+   "fieldtype": "Check",
+   "label": "Dematerialisation Enabled"
+  },
+  {
+   "fieldname": "pledging_enabled",
+   "fieldtype": "Check",
+   "label": "Pledging Enabled"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Demat Account",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SDMT-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

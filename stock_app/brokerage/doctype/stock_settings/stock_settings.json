@@ -1,0 +1,229 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "company_name",
+  "tagline",
+  "sebi_registration_number",
+  "sebi_registration_type",
+  "col_break_140434226687744",
+  "exchange_membership_nse",
+  "exchange_membership_bse",
+  "clearing_member_id",
+  "dp_name",
+  "dp_id",
+  "sec_break_140434226688128",
+  "gstin",
+  "pan",
+  "address",
+  "city",
+  "state",
+  "pincode",
+  "phone",
+  "email",
+  "website",
+  "upi_id",
+  "logo_url",
+  "sec_break_140434226688896",
+  "whatsapp_number",
+  "relationship_manager_default",
+  "brokerage_plan_default",
+  "monthly_statement_day",
+  "margin_call_threshold_percent",
+  "auto_square_off_threshold_percent",
+  "contract_note_time",
+  "working_days"
+ ],
+ "fields": [
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tagline",
+   "fieldtype": "Data",
+   "label": "Tagline"
+  },
+  {
+   "fieldname": "sebi_registration_number",
+   "fieldtype": "Data",
+   "label": "SEBI Registration Number"
+  },
+  {
+   "fieldname": "sebi_registration_type",
+   "fieldtype": "Select",
+   "label": "SEBI Registration Type",
+   "options": "Stock Broker\nInvestment Adviser\nDP\nPortfolio Manager"
+  },
+  {
+   "fieldname": "col_break_140434226687744",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "exchange_membership_nse",
+   "fieldtype": "Data",
+   "label": "NSE Membership"
+  },
+  {
+   "fieldname": "exchange_membership_bse",
+   "fieldtype": "Data",
+   "label": "BSE Membership"
+  },
+  {
+   "fieldname": "clearing_member_id",
+   "fieldtype": "Data",
+   "label": "Clearing Member ID"
+  },
+  {
+   "fieldname": "dp_name",
+   "fieldtype": "Data",
+   "label": "DP Name"
+  },
+  {
+   "fieldname": "dp_id",
+   "fieldtype": "Data",
+   "label": "DP ID"
+  },
+  {
+   "fieldname": "sec_break_140434226688128",
+   "fieldtype": "Section Break",
+   "label": "Company Details"
+  },
+  {
+   "fieldname": "gstin",
+   "fieldtype": "Data",
+   "label": "GSTIN"
+  },
+  {
+   "fieldname": "pan",
+   "fieldtype": "Data",
+   "label": "PAN"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "website",
+   "fieldtype": "Data",
+   "label": "Website"
+  },
+  {
+   "fieldname": "upi_id",
+   "fieldtype": "Data",
+   "label": "UPI ID"
+  },
+  {
+   "fieldname": "logo_url",
+   "fieldtype": "Data",
+   "label": "Logo URL"
+  },
+  {
+   "fieldname": "sec_break_140434226688896",
+   "fieldtype": "Section Break",
+   "label": "Operations"
+  },
+  {
+   "fieldname": "whatsapp_number",
+   "fieldtype": "Data",
+   "label": "WhatsApp Number"
+  },
+  {
+   "fieldname": "relationship_manager_default",
+   "fieldtype": "Data",
+   "label": "Default RM"
+  },
+  {
+   "fieldname": "brokerage_plan_default",
+   "fieldtype": "Data",
+   "label": "Default Brokerage Plan"
+  },
+  {
+   "fieldname": "monthly_statement_day",
+   "fieldtype": "Int",
+   "label": "Statement Day",
+   "default": "1"
+  },
+  {
+   "fieldname": "margin_call_threshold_percent",
+   "fieldtype": "Float",
+   "label": "Margin Call Threshold %",
+   "default": "80"
+  },
+  {
+   "fieldname": "auto_square_off_threshold_percent",
+   "fieldtype": "Float",
+   "label": "Auto Square-Off Threshold %",
+   "default": "90"
+  },
+  {
+   "fieldname": "contract_note_time",
+   "fieldtype": "Time",
+   "label": "Contract Note Time"
+  },
+  {
+   "fieldname": "working_days",
+   "fieldtype": "Data",
+   "label": "Working Days"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "issingle": 1,
+ "autoname": "Stock Settings"
+}

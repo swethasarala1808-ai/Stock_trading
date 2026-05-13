@@ -1,0 +1,206 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "plan_name",
+  "plan_type",
+  "description",
+  "is_active",
+  "effective_from",
+  "sec_break_140434226682944",
+  "equity_delivery_percent",
+  "equity_delivery_flat",
+  "equity_intraday_percent",
+  "equity_intraday_flat",
+  "sec_break_140434226683264",
+  "futures_percent",
+  "futures_flat",
+  "options_per_lot",
+  "options_percent",
+  "sec_break_140434226683584",
+  "currency_percent",
+  "currency_flat",
+  "commodity_percent",
+  "commodity_flat",
+  "sec_break_140434226683904",
+  "minimum_brokerage_per_order",
+  "maximum_brokerage_per_order",
+  "account_opening_charges",
+  "account_maintenance_annual",
+  "dp_charges_per_script",
+  "call_and_trade_charges"
+ ],
+ "fields": [
+  {
+   "fieldname": "plan_name",
+   "fieldtype": "Data",
+   "label": "Plan Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "plan_type",
+   "fieldtype": "Select",
+   "label": "Plan Type",
+   "options": "Flat Fee\nPercentage\nZero Brokerage\nHybrid",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "effective_from",
+   "fieldtype": "Date",
+   "label": "Effective From"
+  },
+  {
+   "fieldname": "sec_break_140434226682944",
+   "fieldtype": "Section Break",
+   "label": "Equity"
+  },
+  {
+   "fieldname": "equity_delivery_percent",
+   "fieldtype": "Float",
+   "label": "Delivery %"
+  },
+  {
+   "fieldname": "equity_delivery_flat",
+   "fieldtype": "Currency",
+   "label": "Delivery Flat"
+  },
+  {
+   "fieldname": "equity_intraday_percent",
+   "fieldtype": "Float",
+   "label": "Intraday %"
+  },
+  {
+   "fieldname": "equity_intraday_flat",
+   "fieldtype": "Currency",
+   "label": "Intraday Flat"
+  },
+  {
+   "fieldname": "sec_break_140434226683264",
+   "fieldtype": "Section Break",
+   "label": "F&O"
+  },
+  {
+   "fieldname": "futures_percent",
+   "fieldtype": "Float",
+   "label": "Futures %"
+  },
+  {
+   "fieldname": "futures_flat",
+   "fieldtype": "Currency",
+   "label": "Futures Flat"
+  },
+  {
+   "fieldname": "options_per_lot",
+   "fieldtype": "Currency",
+   "label": "Options per Lot"
+  },
+  {
+   "fieldname": "options_percent",
+   "fieldtype": "Float",
+   "label": "Options %"
+  },
+  {
+   "fieldname": "sec_break_140434226683584",
+   "fieldtype": "Section Break",
+   "label": "Other"
+  },
+  {
+   "fieldname": "currency_percent",
+   "fieldtype": "Float",
+   "label": "Currency %"
+  },
+  {
+   "fieldname": "currency_flat",
+   "fieldtype": "Currency",
+   "label": "Currency Flat"
+  },
+  {
+   "fieldname": "commodity_percent",
+   "fieldtype": "Float",
+   "label": "Commodity %"
+  },
+  {
+   "fieldname": "commodity_flat",
+   "fieldtype": "Currency",
+   "label": "Commodity Flat"
+  },
+  {
+   "fieldname": "sec_break_140434226683904",
+   "fieldtype": "Section Break",
+   "label": "Limits"
+  },
+  {
+   "fieldname": "minimum_brokerage_per_order",
+   "fieldtype": "Currency",
+   "label": "Min per Order"
+  },
+  {
+   "fieldname": "maximum_brokerage_per_order",
+   "fieldtype": "Currency",
+   "label": "Max per Order"
+  },
+  {
+   "fieldname": "account_opening_charges",
+   "fieldtype": "Currency",
+   "label": "Account Opening"
+  },
+  {
+   "fieldname": "account_maintenance_annual",
+   "fieldtype": "Currency",
+   "label": "Annual AMC"
+  },
+  {
+   "fieldname": "dp_charges_per_script",
+   "fieldtype": "Currency",
+   "label": "DP per Script"
+  },
+  {
+   "fieldname": "call_and_trade_charges",
+   "fieldtype": "Currency",
+   "label": "Call & Trade"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Brokerage Plan",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "field:plan_name",
+ "naming_rule": "By fieldname"
+}

@@ -1,0 +1,166 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "client_phone",
+  "call_date",
+  "call_time",
+  "shortfall_amount",
+  "current_margin",
+  "required_margin",
+  "utilization_percent",
+  "positions_at_risk",
+  "col_break_140434226640704",
+  "whatsapp_sent",
+  "email_sent",
+  "sms_sent",
+  "response_received",
+  "response_time",
+  "funds_added_amount",
+  "response_type",
+  "auto_square_off_time",
+  "positions_squared_off",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "client_phone",
+   "fieldtype": "Data",
+   "label": "Client Phone",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "call_date",
+   "fieldtype": "Date",
+   "label": "Call Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "call_time",
+   "fieldtype": "Time",
+   "label": "Call Time"
+  },
+  {
+   "fieldname": "shortfall_amount",
+   "fieldtype": "Currency",
+   "label": "Shortfall Amount",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "current_margin",
+   "fieldtype": "Currency",
+   "label": "Current Margin"
+  },
+  {
+   "fieldname": "required_margin",
+   "fieldtype": "Currency",
+   "label": "Required Margin"
+  },
+  {
+   "fieldname": "utilization_percent",
+   "fieldtype": "Float",
+   "label": "Utilization %",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "positions_at_risk",
+   "fieldtype": "Small Text",
+   "label": "Positions at Risk"
+  },
+  {
+   "fieldname": "col_break_140434226640704",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "whatsapp_sent",
+   "fieldtype": "Check",
+   "label": "WhatsApp Sent"
+  },
+  {
+   "fieldname": "email_sent",
+   "fieldtype": "Check",
+   "label": "Email Sent"
+  },
+  {
+   "fieldname": "sms_sent",
+   "fieldtype": "Check",
+   "label": "SMS Sent"
+  },
+  {
+   "fieldname": "response_received",
+   "fieldtype": "Check",
+   "label": "Response Received"
+  },
+  {
+   "fieldname": "response_time",
+   "fieldtype": "Datetime",
+   "label": "Response Time"
+  },
+  {
+   "fieldname": "funds_added_amount",
+   "fieldtype": "Currency",
+   "label": "Funds Added"
+  },
+  {
+   "fieldname": "response_type",
+   "fieldtype": "Select",
+   "label": "Response Type",
+   "options": "Funds Added\nPositions Squared\nNo Response\nPartial Response"
+  },
+  {
+   "fieldname": "auto_square_off_time",
+   "fieldtype": "Datetime",
+   "label": "Auto Square-Off Time"
+  },
+  {
+   "fieldname": "positions_squared_off",
+   "fieldtype": "Small Text",
+   "label": "Positions Squared Off"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Margin Call",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SMCL-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

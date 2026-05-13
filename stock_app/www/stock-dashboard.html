@@ -1,0 +1,885 @@
+{% extends "templates/web.html" %}
+{% block title %}Stock Dashboard — Bizaxl Securities{% endblock %}
+{% block head_include %}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --mint:#14F1B1;--blue:#114EFF;--navy:#091526;
+  --bg:#030e1f;--card:#060f1e;--side:#060f1e;
+  --border:#0d2040;--text:#e2e8f0;--muted:#64748b;
+  --success:#00C950;--red:#ef4444;--amber:#f59e0b;
+  --grad:linear-gradient(135deg,#14F1B1,#114EFF);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+/* Sidebar */
+.side{width:220px;min-width:220px;background:var(--side);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.side-logo{padding:20px 18px;border-bottom:1px solid var(--border)}
+.side-logo span{font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.side-logo small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav-item.active{color:var(--mint);background:rgba(20,241,177,.07);border-left-color:var(--mint)}
+.nav-item .ic{width:18px;text-align:center;font-size:14px}
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar h2{font-size:18px;font-weight:600}
+.btn-primary{background:var(--grad);color:#030e1f;border:none;border-radius:10px;padding:8px 18px;font-weight:700;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-primary:hover{opacity:.9}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:8px}
+.content{flex:1;overflow-y:auto;padding:24px}
+/* Sections */
+.section{display:none}.section.active{display:block}
+/* Stat grid */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px}
+.stat-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.stat-card .val{font-size:26px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.stat-card .sub{font-size:11px;color:var(--muted);margin-top:4px}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+/* Table */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl td{padding:10px 12px;border-bottom:1px solid rgba(13,32,64,.5);font-size:13px;vertical-align:middle}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tbl .empty{text-align:center;color:var(--muted);padding:32px}
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.badge-green{background:rgba(0,201,80,.15);color:#00C950}
+.badge-red{background:rgba(239,68,68,.15);color:#ef4444}
+.badge-amber{background:rgba(245,158,11,.15);color:#f59e0b}
+.badge-blue{background:rgba(17,78,255,.2);color:#60a5fa}
+.badge-gray{background:rgba(100,116,139,.15);color:#94a3b8}
+/* Filter tabs */
+.tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent}
+.tab.active{background:rgba(20,241,177,.12);color:var(--mint);border-color:var(--mint)}
+/* Search & filters */
+.filter-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.inp{background:#0a1628;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none}
+.inp:focus{border-color:var(--mint)}
+.inp::placeholder{color:var(--muted)}
+/* Progress bar */
+.bar-wrap{background:#0d2040;border-radius:4px;height:6px;width:100px}
+.bar{height:6px;border-radius:4px}
+.bar-green{background:#00C950}.bar-amber{background:#f59e0b}.bar-red{background:#ef4444}
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:600px;max-width:95vw;max-height:90vh;overflow-y:auto}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:24px}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:12px;color:var(--muted)}
+.form-group .inp{width:100%}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:8px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px}
+/* Market watch color */
+.up{color:#00C950}.down{color:#ef4444}
+/* Utilization bar */
+.util-bar{display:flex;align-items:center;gap:8px;font-size:12px}
+/* Responsive */
+@media(max-width:768px){.side{display:none}.form-grid{grid-template-columns:1fr}}
+.refresh-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<script>
+window.addEventListener('DOMContentLoaded',function(){if(window.frappe){if(frappe.msgprint)frappe.msgprint=function(){};if(frappe.throw)frappe.throw=function(){};}});
+window.addEventListener('unhandledrejection',function(e){e.preventDefault();});
+</script>
+
+<!-- Sidebar -->
+<div class="side">
+  <div class="side-logo">
+    <span>♟ Bizaxl</span>
+    <small>Securities Pvt Ltd</small>
+  </div>
+  <div style="padding:8px 0">
+    <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="ic">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="showSection('clients',this)"><span class="ic">👥</span>Clients</div>
+    <div class="nav-item" onclick="showSection('kyc',this)"><span class="ic">📋</span>KYC & Documents</div>
+    <div class="nav-item" onclick="showSection('orders',this)"><span class="ic">📈</span>Orders</div>
+    <div class="nav-item" onclick="showSection('tradebook',this)"><span class="ic">📒</span>Trade Book</div>
+    <div class="nav-item" onclick="showSection('market',this)"><span class="ic">👁</span>Market Watch</div>
+    <div class="nav-item" onclick="showSection('portfolio',this)"><span class="ic">💼</span>Portfolio / MTM</div>
+    <div class="nav-item" onclick="showSection('margin',this)"><span class="ic">⚠️</span>Margin & Risk</div>
+    <div class="nav-item" onclick="showSection('contracts',this)"><span class="ic">📄</span>Contract Notes</div>
+    <div class="nav-item" onclick="showSection('invoices',this)"><span class="ic">🧾</span>Invoices & Billing</div>
+    <div class="nav-item" onclick="showSection('ledger',this)"><span class="ic">📒</span>Ledger</div>
+    <div class="nav-item" onclick="showSection('alerts',this)"><span class="ic">🔔</span>Alerts</div>
+    <div class="nav-item" onclick="showSection('settings',this)"><span class="ic">⚙️</span>Settings</div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <h2 id="section-title">Dashboard</h2>
+    <button class="btn-primary" onclick="openNewClientModal()">+ New Client</button>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="section active" id="sec-dashboard" style="display:block">
+      <div class="stat-grid" id="stat-grid">
+        <div class="stat-card"><div class="lbl">Total Clients</div><div class="val" id="s-total">—</div></div>
+        <div class="stat-card"><div class="lbl">Active Clients</div><div class="val" id="s-active">—</div></div>
+        <div class="stat-card"><div class="lbl">Total AUM</div><div class="val" id="s-aum">—</div></div>
+        <div class="stat-card"><div class="lbl">Today's Turnover</div><div class="val" id="s-turn">—</div></div>
+        <div class="stat-card"><div class="lbl">Orders Today</div><div class="val" id="s-orders">—</div></div>
+        <div class="stat-card"><div class="lbl">Pending KYC</div><div class="val" id="s-kyc">—</div></div>
+        <div class="stat-card"><div class="lbl">Margin Calls</div><div class="val" id="s-margin">—</div></div>
+        <div class="stat-card"><div class="lbl">Monthly Brokerage</div><div class="val" id="s-brok">—</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-title">Recent Orders <span style="font-size:11px;color:var(--muted)">Last 10</span></div>
+          <table class="tbl"><thead><tr><th>Client</th><th>Symbol</th><th>Type</th><th>Qty</th><th>Status</th></tr></thead>
+          <tbody id="dash-orders"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-title">Margin Calls <span style="color:var(--red);font-size:12px" id="mc-count"></span></div>
+          <table class="tbl"><thead><tr><th>Client</th><th>Shortfall</th><th>Util%</th><th>Action</th></tr></thead>
+          <tbody id="dash-margins"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="section" id="sec-clients">
+      <div class="tabs">
+        <div class="tab active" onclick="filterClients(null,this)">All</div>
+        <div class="tab" onclick="filterClients('KYC Pending',this)">Pending KYC</div>
+        <div class="tab" onclick="filterClients('Account Active',this)">Active</div>
+        <div class="tab" onclick="filterClients('Account Suspended',this)">Suspended</div>
+      </div>
+      <div class="filter-row">
+        <input class="inp" id="client-search" placeholder="Search name, phone, PAN..." onkeyup="searchClients()" style="width:280px">
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Name</th><th>Phone</th><th>PAN</th><th>Type</th><th>Risk</th><th>AUM</th><th>Status</th><th>RM</th><th>Actions</th></tr></thead>
+          <tbody id="clients-tbody"><tr><td colspan="9" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- KYC -->
+    <div class="section" id="sec-kyc">
+      <div class="tabs">
+        <div class="tab active" onclick="filterKyc(null,this)">All</div>
+        <div class="tab" onclick="filterKyc('Pending',this)">Pending</div>
+        <div class="tab" onclick="filterKyc('Under Review',this)">Under Review</div>
+        <div class="tab" onclick="filterKyc('Verified',this)">Verified</div>
+        <div class="tab" onclick="filterKyc('Rejected',this)">Rejected</div>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Client</th><th>KYC Type</th><th>Status</th><th>Verified On</th><th>Expiry</th><th>Actions</th></tr></thead>
+          <tbody id="kyc-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="section" id="sec-orders">
+      <div class="tabs">
+        <div class="tab active" onclick="filterOrders(null,this)">All</div>
+        <div class="tab" onclick="filterOrders('Placed',this)">Placed</div>
+        <div class="tab" onclick="filterOrders('Open',this)">Open</div>
+        <div class="tab" onclick="filterOrders('Executed',this)">Executed</div>
+        <div class="tab" onclick="filterOrders('Cancelled',this)">Cancelled</div>
+        <div class="tab" onclick="filterOrders('Rejected',this)">Rejected</div>
+      </div>
+      <div class="filter-row">
+        <input class="inp" id="order-client" placeholder="Client name..." style="width:200px">
+        <input class="inp" type="date" id="order-from">
+        <input class="inp" type="date" id="order-to">
+        <select class="inp" id="order-seg"><option value="">All Segments</option><option>Equity</option><option>F&O</option><option>Currency</option><option>Commodity</option></select>
+        <button class="btn-primary btn-sm" onclick="loadOrders()">Filter</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Order ID</th><th>Client</th><th>Date</th><th>Symbol</th><th>Type</th><th>B/S</th><th>Qty</th><th>Price</th><th>Status</th><th>Exec Value</th></tr></thead>
+          <tbody id="orders-tbody"><tr><td colspan="10" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TRADE BOOK -->
+    <div class="section" id="sec-tradebook">
+      <div class="filter-row">
+        <input class="inp" id="trade-client" placeholder="Client name..." style="width:200px">
+        <input class="inp" type="date" id="trade-from">
+        <input class="inp" type="date" id="trade-to">
+        <select class="inp" id="trade-seg"><option value="">All Segments</option><option>Equity</option><option>F&O</option></select>
+        <button class="btn-primary btn-sm" onclick="loadTradeBook()">Filter</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Trade ID</th><th>Client</th><th>Date</th><th>Symbol</th><th>B/S</th><th>Qty</th><th>Price</th><th>Value</th><th>Charges</th><th>Net</th></tr></thead>
+          <tbody id="trade-tbody"><tr><td colspan="10" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MARKET WATCH -->
+    <div class="section" id="sec-market">
+      <div class="tabs" id="sector-tabs">
+        <div class="tab active" onclick="filterMarket(null,null,this)">All</div>
+        <div class="tab" onclick="filterMarket('Banking',null,this)">Banking</div>
+        <div class="tab" onclick="filterMarket('IT',null,this)">IT</div>
+        <div class="tab" onclick="filterMarket('Pharma',null,this)">Pharma</div>
+        <div class="tab" onclick="filterMarket('Auto',null,this)">Auto</div>
+        <div class="tab" onclick="filterMarket('Energy',null,this)">Energy</div>
+        <div class="tab" onclick="filterMarket('FMCG',null,this)">FMCG</div>
+        <div class="tab" onclick="filterMarket('Metal',null,this)">Metal</div>
+      </div>
+      <div class="filter-row">
+        <input class="inp" id="mkt-search" placeholder="Search symbol..." style="width:200px" onkeyup="searchMarket()">
+        <select class="inp" id="mkt-exch" onchange="loadMarketWatch()"><option value="">All Exchanges</option><option>NSE</option><option>BSE</option></select>
+        <button class="refresh-btn" onclick="loadMarketWatch()">↻ Refresh</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Exchange</th><th>LTP</th><th>Change</th><th>Change%</th><th>High</th><th>Low</th><th>Volume</th><th>52W H/L</th></tr></thead>
+          <tbody id="market-tbody"><tr><td colspan="10" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO / MTM -->
+    <div class="section" id="sec-portfolio">
+      <div class="filter-row">
+        <input class="inp" id="port-client" placeholder="Client name..." style="width:250px">
+        <button class="btn-primary btn-sm" onclick="loadPortfolio()">Load Portfolio</button>
+      </div>
+      <div class="stat-grid" id="port-summary" style="display:none">
+        <div class="stat-card"><div class="lbl">Portfolio Value</div><div class="val" id="p-val">—</div></div>
+        <div class="stat-card"><div class="lbl">Total Invested</div><div class="val" id="p-inv">—</div></div>
+        <div class="stat-card"><div class="lbl">Total P&L</div><div class="val" id="p-pnl">—</div></div>
+        <div class="stat-card"><div class="lbl">Available Cash</div><div class="val" id="p-cash">—</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Holdings</div>
+        <table class="tbl">
+          <thead><tr><th>Symbol</th><th>Qty</th><th>Avg Price</th><th>LTP</th><th>Value</th><th>P&L</th><th>P&L%</th></tr></thead>
+          <tbody id="holdings-tbody"><tr><td colspan="7" class="empty">Select a client to view holdings</td></tr></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">MTM Positions</div>
+        <table class="tbl">
+          <thead><tr><th>Symbol</th><th>Segment</th><th>Type</th><th>Qty</th><th>Avg Cost</th><th>CMP</th><th>Unrealized P&L</th><th>Status</th></tr></thead>
+          <tbody id="mtm-tbody"><tr><td colspan="8" class="empty">Select a client to view positions</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MARGIN & RISK -->
+    <div class="section" id="sec-margin">
+      <div class="card">
+        <div class="card-title">Margin Overview — All Clients</div>
+        <table class="tbl">
+          <thead><tr><th>Client</th><th>Cash</th><th>Collateral</th><th>Margin Used</th><th>Margin Avail</th><th>Utilization</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="margin-tbody"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Auto Square-Off Log</div>
+        <table class="tbl">
+          <thead><tr><th>Client</th><th>Date</th><th>Symbol</th><th>Trigger</th><th>Qty</th><th>Price</th><th>Realized P&L</th><th>Status</th></tr></thead>
+          <tbody id="squareoff-tbody"><tr><td colspan="8" class="empty">No auto square-offs</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CONTRACT NOTES -->
+    <div class="section" id="sec-contracts">
+      <div class="filter-row">
+        <input class="inp" id="cn-client" placeholder="Client name..." style="width:200px">
+        <input class="inp" type="date" id="cn-from">
+        <input class="inp" type="date" id="cn-to">
+        <select class="inp" id="cn-status"><option value="">All Status</option><option>Pending</option><option>Paid</option><option>Overdue</option></select>
+        <button class="btn-primary btn-sm" onclick="loadContractNotes()">Filter</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Settlement No</th><th>Client</th><th>Date</th><th>Exchange</th><th>Turnover</th><th>Charges</th><th>Net Payable</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="cn-tbody"><tr><td colspan="10" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="section" id="sec-invoices">
+      <div class="filter-row">
+        <select class="inp" id="inv-status"><option value="">All Status</option><option>Paid</option><option>Unpaid</option><option>Overdue</option></select>
+        <button class="btn-primary btn-sm" onclick="loadInvoices()">Filter</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Invoice No</th><th>Client</th><th>Date</th><th>Total</th><th>GST</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="inv-tbody"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEDGER -->
+    <div class="section" id="sec-ledger">
+      <div class="filter-row">
+        <input class="inp" id="led-client" placeholder="Client name..." style="width:250px">
+        <input class="inp" type="date" id="led-from">
+        <input class="inp" type="date" id="led-to">
+        <button class="btn-primary btn-sm" onclick="loadLedger()">Load Ledger</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Narration</th><th>Ref No</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
+          <tbody id="led-tbody"><tr><td colspan="6" class="empty">Select a client to view ledger</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="section" id="sec-alerts">
+      <div class="tabs">
+        <div class="tab active">All</div>
+        <div class="tab">Margin Call</div>
+        <div class="tab">KYC Expiry</div>
+        <div class="tab">Monthly Statement</div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          Margin Call Alerts
+          <button class="btn-primary btn-sm" onclick="sendMonthlyStatements()">Send Monthly Statements</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Client</th><th>Phone</th><th>Date</th><th>Shortfall</th><th>Util%</th><th>WA Sent</th><th>Response</th><th>Action</th></tr></thead>
+          <tbody id="alerts-tbody"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="section" id="sec-settings">
+      <div class="card" style="max-width:700px">
+        <div class="card-title">Company Settings</div>
+        <div class="form-grid" id="settings-form">
+          <div class="form-group"><label>Company Name</label><input class="inp" id="cfg-company_name"></div>
+          <div class="form-group"><label>SEBI Registration</label><input class="inp" id="cfg-sebi_registration_number"></div>
+          <div class="form-group"><label>GSTIN</label><input class="inp" id="cfg-gstin"></div>
+          <div class="form-group"><label>PAN</label><input class="inp" id="cfg-pan"></div>
+          <div class="form-group"><label>Phone</label><input class="inp" id="cfg-phone"></div>
+          <div class="form-group"><label>Email</label><input class="inp" id="cfg-email"></div>
+          <div class="form-group"><label>WhatsApp Number</label><input class="inp" id="cfg-whatsapp_number"></div>
+          <div class="form-group"><label>Website</label><input class="inp" id="cfg-website"></div>
+          <div class="form-group"><label>Margin Call Threshold %</label><input class="inp" type="number" id="cfg-margin_call_threshold_percent"></div>
+          <div class="form-group"><label>Auto Square-Off Threshold %</label><input class="inp" type="number" id="cfg-auto_square_off_threshold_percent"></div>
+          <div class="form-group"><label>Monthly Statement Day</label><input class="inp" type="number" id="cfg-monthly_statement_day"></div>
+          <div class="form-group"><label>DP ID</label><input class="inp" id="cfg-dp_id"></div>
+        </div>
+        <div style="margin-top:20px">
+          <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- Add Client Modal -->
+<div class="modal-bg" id="modal-client">
+  <div class="modal">
+    <div class="modal-head"><span style="font-weight:600;font-size:16px">New Client Onboarding</span><span style="cursor:pointer;color:var(--muted)" onclick="closeModal('modal-client')">✕</span></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name *</label><input class="inp" id="nc-name" placeholder="Full legal name"></div>
+        <div class="form-group"><label>Phone *</label><input class="inp" id="nc-phone" placeholder="10-digit mobile"></div>
+        <div class="form-group"><label>Email</label><input class="inp" id="nc-email" placeholder="email@domain.com"></div>
+        <div class="form-group"><label>PAN Number</label><input class="inp" id="nc-pan" placeholder="ABCDE1234F"></div>
+        <div class="form-group"><label>Client Type</label>
+          <select class="inp" id="nc-type"><option>Individual</option><option>HUF</option><option>Corporate</option><option>NRI</option></select></div>
+        <div class="form-group"><label>Risk Profile</label>
+          <select class="inp" id="nc-risk"><option>Conservative</option><option>Moderate</option><option>Aggressive</option><option>Very Aggressive</option></select></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModal('modal-client')">Cancel</button>
+      <button class="btn-primary" onclick="submitNewClient()">Create Client</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function getCsrf(){const v=document.cookie.match('(^|;)\\s*csrf_token\\s*=\\s*([^;]+)');return v?v.pop():'';}
+async function post(method,params){
+  try {
+    const fd=new URLSearchParams();
+    Object.entries(params||{}).forEach(([k,v])=>fd.append(k,typeof v==='object'?JSON.stringify(v):String(v)));
+    const r=await fetch('/api/method/'+method,{method:'POST',credentials:'include',
+      headers:{'Content-Type':'application/x-www-form-urlencoded','X-Frappe-CSRF-Token':getCsrf(),'X-Frappe-CMD':method},body:fd});
+    if(!r.ok){console.error('API error',method,r.status);return null;}
+    const d=await r.json();
+    if(d.exc){console.error('Frappe exc',method,d.exc);return null;}
+    return d.message;
+  } catch(e){console.error('post failed',method,e);return null;}
+}
+async function get(method,params){
+  const q=new URLSearchParams(params||{});
+  const r=await fetch('/api/method/'+method+'?'+q,{credentials:'include',headers:{'X-Frappe-CSRF-Token':getCsrf()}});
+  const d=await r.json();return d.message;
+}
+
+const fc=(n)=>n==null?'—':'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:0});
+const fn=(n,d=2)=>n==null?'—':Number(n).toFixed(d);
+const fdate=(d)=>d?new Date(d).toLocaleDateString('en-IN'):'—';
+
+function showSection(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const sec=document.getElementById('sec-'+id);
+  if(sec) sec.style.display='block';
+  if(el) el.classList.add('active');
+  const titles={dashboard:'Dashboard',clients:'Clients',kyc:'KYC & Documents',orders:'Orders',
+    tradebook:'Trade Book',market:'Market Watch',portfolio:'Portfolio / MTM',
+    margin:'Margin & Risk',contracts:'Contract Notes',invoices:'Invoices & Billing',
+    ledger:'Ledger',alerts:'Alerts',settings:'Settings'};
+  document.getElementById('section-title').textContent=titles[id]||id;
+  // Load data for section
+  const loaders={dashboard:loadDashboard,clients:()=>loadClients(null),kyc:()=>loadKyc(null),
+    orders:loadOrders,tradebook:loadTradeBook,market:loadMarketWatch,
+    margin:loadMarginData,contracts:loadContractNotes,invoices:loadInvoices,alerts:loadAlerts};
+  if(loaders[id]) loaders[id]();
+}
+
+// ── Dashboard ──────────────────────────────────────────────────
+async function loadDashboard(){
+  const [stats,orders,margins]=await Promise.all([
+    post('stock_app.api.get_dashboard_stats',{}),
+    post('stock_app.api.get_orders',{limit:10}),
+    post('stock_app.api.get_margin_calls',{is_resolved:0,limit:5})
+  ]);
+  if(stats){
+    document.getElementById('s-total').textContent=stats.total_clients||0;
+    document.getElementById('s-active').textContent=stats.active_clients||0;
+    document.getElementById('s-aum').textContent=fc(stats.total_aum);
+    document.getElementById('s-turn').textContent=fc(stats.today_turnover);
+    document.getElementById('s-orders').textContent=stats.orders_today||0;
+    document.getElementById('s-kyc').textContent=stats.pending_kyc||0;
+    document.getElementById('s-margin').textContent=stats.margin_calls||0;
+    document.getElementById('s-brok').textContent=fc(stats.monthly_brokerage);
+  }
+  renderDashOrders(orders||[]);
+  renderDashMargins(margins||[]);
+}
+
+function renderDashOrders(rows){
+  const tb=document.getElementById('dash-orders');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="5" class="empty">No orders today</td></tr>';return;}
+  tb.innerHTML=rows.map(o=>`<tr>
+    <td>${o.client_name}</td><td><strong>${o.symbol}</strong></td>
+    <td><span class="badge ${o.trade_type==='Buy'?'badge-green':'badge-red'}">${o.trade_type||'—'}</span></td>
+    <td>${o.quantity||'—'}</td>
+    <td><span class="badge ${statusBadge(o.status)}">${o.status||'—'}</span></td>
+  </tr>`).join('');
+}
+
+function renderDashMargins(rows){
+  const tb=document.getElementById('dash-margins');
+  document.getElementById('mc-count').textContent=rows.length?`(${rows.length} active)`:'';
+  if(!rows.length){tb.innerHTML='<tr><td colspan="4" class="empty">No active margin calls</td></tr>';return;}
+  tb.innerHTML=rows.map(m=>`<tr style="background:rgba(239,68,68,.05)">
+    <td><strong>${m.client_name}</strong></td>
+    <td style="color:var(--red)">${fc(m.shortfall_amount)}</td>
+    <td>${fn(m.utilization_percent,1)}%</td>
+    <td><button class="btn-primary btn-sm" onclick="sendWA('${m.client_name}')">📲 WA</button></td>
+  </tr>`).join('');
+}
+
+function statusBadge(s){
+  const m={'Executed':'badge-green','Open':'badge-blue','Placed':'badge-amber',
+    'Cancelled':'badge-gray','Rejected':'badge-red','Verified':'badge-green',
+    'Pending':'badge-amber','Under Review':'badge-blue','Rejected':'badge-red',
+    'Paid':'badge-green','Unpaid':'badge-amber','Overdue':'badge-red','Active':'badge-green'};
+  return m[s]||'badge-gray';
+}
+
+// ── Clients ────────────────────────────────────────────────────
+let currentClientStatus=null;
+function filterClients(status,el){
+  currentClientStatus=status;
+  document.querySelectorAll('#sec-clients .tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  loadClients(status);
+}
+function searchClients(){
+  const q=document.getElementById('client-search').value;
+  if(q.length>=2||q.length===0) loadClients(currentClientStatus,q);
+}
+async function loadClients(status,search){
+  const params={};if(status)params.status=status;if(search)params.search=search;
+  const rows=await post('stock_app.api.get_clients',params)||[];
+  const tb=document.getElementById('clients-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="9" class="empty">No clients found</td></tr>';return;}
+  tb.innerHTML=rows.map(c=>`<tr>
+    <td><strong>${c.full_name}</strong></td><td>${c.phone||'—'}</td><td>${c.pan_number||'—'}</td>
+    <td>${c.client_type||'—'}</td><td>${c.risk_profile||'—'}</td>
+    <td>${fc(c.total_aum)}</td>
+    <td><span class="badge ${statusBadge(c.account_status)}">${c.account_status||'—'}</span></td>
+    <td>${c.relationship_manager||'—'}</td>
+    <td><button class="btn-primary btn-sm" onclick="viewClient('${c.full_name}')">View</button></td>
+  </tr>`).join('');
+}
+
+async function viewClient(name){
+  const d=await post('stock_app.api.get_client_detail',{client_name:name})||{};
+  alert(`${d.full_name}\nPhone: ${d.phone}\nPAN: ${d.pan_number}\nAUM: ${fc(d.total_aum)}\nStatus: ${d.account_status}`);
+}
+
+function openNewClientModal(){document.getElementById('modal-client').classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+async function submitNewClient(){
+  const name=document.getElementById('nc-name').value.trim();
+  const phone=document.getElementById('nc-phone').value.trim();
+  if(!name||!phone){alert('Name and phone are required');return;}
+  const r=await post('stock_app.api.create_client',{
+    full_name:name,phone,email:document.getElementById('nc-email').value,
+    pan_number:document.getElementById('nc-pan').value,
+    client_type:document.getElementById('nc-type').value,
+    risk_profile:document.getElementById('nc-risk').value
+  });
+  if(r&&r.success){closeModal('modal-client');loadClients(currentClientStatus);alert('Client created: '+r.name);}
+  else alert('Error: '+(r&&r.error)||'Unknown error');
+}
+
+// ── KYC ───────────────────────────────────────────────────────
+async function loadKyc(status){
+  const params={};if(status)params.kyc_status=status;
+  // Get all clients and their KYC
+  const clients=await post('stock_app.api.get_clients',{limit:100})||[];
+  const tb=document.getElementById('kyc-tbody');
+  if(!clients.length){tb.innerHTML='<tr><td colspan="6" class="empty">No KYC records</td></tr>';return;}
+  // Get KYC for each active client
+  const rows=clients.slice(0,20);
+  let html='';
+  for(const c of rows){
+    html+=`<tr>
+      <td><strong>${c.full_name}</strong></td><td>Video KYC</td>
+      <td><span class="badge ${statusBadge(c.account_status==='Account Active'?'Verified':'Pending')}">${c.account_status==='Account Active'?'Verified':'Pending'}</span></td>
+      <td>—</td><td>—</td>
+      <td>
+        <button class="btn-primary btn-sm" onclick="sendKycReminder('${c.full_name}')">📲 Reminder</button>
+      </td>
+    </tr>`;
+  }
+  tb.innerHTML=html;
+}
+function filterKyc(status,el){
+  document.querySelectorAll('#sec-kyc .tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  loadKyc(status);
+}
+async function sendKycReminder(name){
+  const r=await post('stock_app.api.send_kyc_expiry_reminder',{client_name:name});
+  if(r&&r.success) window.open(r.wa_url,'_blank');
+}
+
+// ── Orders ─────────────────────────────────────────────────────
+async function loadOrders(){
+  const params={limit:50};
+  const client=document.getElementById('order-client')?.value;
+  const from=document.getElementById('order-from')?.value;
+  const to=document.getElementById('order-to')?.value;
+  const seg=document.getElementById('order-seg')?.value;
+  if(client) params.client_name=client;
+  if(from) params.date_from=from;
+  if(to) params.date_to=to;
+  if(seg) params.segment=seg;
+  if(window._orderStatus) params.status=window._orderStatus;
+  const rows=await post('stock_app.api.get_orders',params)||[];
+  const tb=document.getElementById('orders-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="10" class="empty">No orders found</td></tr>';return;}
+  tb.innerHTML=rows.map(o=>`<tr>
+    <td style="font-size:11px;color:var(--muted)">${o.name}</td>
+    <td>${o.client_name}</td><td>${fdate(o.order_date)}</td>
+    <td><strong>${o.symbol}</strong></td><td>${o.order_type||'—'}</td>
+    <td><span class="badge ${o.trade_type==='Buy'?'badge-green':'badge-red'}">${o.trade_type}</span></td>
+    <td>${o.quantity}</td><td>${fc(o.price)}</td>
+    <td><span class="badge ${statusBadge(o.status)}">${o.status}</span></td>
+    <td>${fc(o.executed_value)}</td>
+  </tr>`).join('');
+}
+function filterOrders(status,el){
+  window._orderStatus=status;
+  document.querySelectorAll('#sec-orders .tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  loadOrders();
+}
+
+// ── Trade Book ─────────────────────────────────────────────────
+async function loadTradeBook(){
+  const params={limit:50};
+  const client=document.getElementById('trade-client')?.value;
+  const from=document.getElementById('trade-from')?.value;
+  const to=document.getElementById('trade-to')?.value;
+  const seg=document.getElementById('trade-seg')?.value;
+  if(client) params.client_name=client;if(from) params.date_from=from;if(to) params.date_to=to;if(seg) params.segment=seg;
+  const rows=await post('stock_app.api.get_trade_book',params)||[];
+  const tb=document.getElementById('trade-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="10" class="empty">No trades found</td></tr>';return;}
+  tb.innerHTML=rows.map(t=>`<tr>
+    <td style="font-size:11px;color:var(--muted)">${t.trade_id||t.name}</td>
+    <td>${t.client_name}</td><td>${fdate(t.trade_date)}</td>
+    <td><strong>${t.symbol}</strong></td>
+    <td><span class="badge ${t.trade_type==='Buy'?'badge-green':'badge-red'}">${t.trade_type}</span></td>
+    <td>${t.quantity}</td><td>${fc(t.price)}</td><td>${fc(t.trade_value)}</td>
+    <td>${fc(t.total_charges)}</td><td>${fc(t.net_amount)}</td>
+  </tr>`).join('');
+}
+
+// ── Market Watch ───────────────────────────────────────────────
+let _mktSector=null;
+async function loadMarketWatch(){
+  const params={limit:50};
+  if(_mktSector) params.sector=_mktSector;
+  const exch=document.getElementById('mkt-exch')?.value;
+  if(exch) params.exchange=exch;
+  const rows=await post('stock_app.api.get_market_watch',params)||[];
+  renderMarket(rows);
+}
+function filterMarket(sector,exch,el){
+  _mktSector=sector;
+  document.querySelectorAll('#sector-tabs .tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  loadMarketWatch();
+}
+function searchMarket(){
+  const q=document.getElementById('mkt-search').value;
+  if(q.length>=1||q.length===0) post('stock_app.api.get_market_watch',{search:q,limit:50}).then(renderMarket);
+}
+function renderMarket(rows){
+  const tb=document.getElementById('market-tbody');
+  if(!rows||!rows.length){tb.innerHTML='<tr><td colspan="10" class="empty">No data</td></tr>';return;}
+  tb.innerHTML=rows.map(s=>{
+    const up=(s.day_change||0)>=0;
+    const cls=up?'up':'down'; const arrow=up?'▲':'▼';
+    return `<tr>
+      <td><strong>${s.symbol}</strong></td><td style="color:var(--muted);font-size:12px">${s.company_name||'—'}</td>
+      <td><span class="badge badge-blue">${s.exchange}</span></td>
+      <td style="font-weight:600">${fc(s.last_price)}</td>
+      <td class="${cls}">${arrow} ${fc(s.day_change)}</td>
+      <td class="${cls}">${fn(s.day_change_percent,2)}%</td>
+      <td>${fc(s.high_price)}</td><td>${fc(s.low_price)}</td>
+      <td style="color:var(--muted)">${Number(s.volume||0).toLocaleString('en-IN')}</td>
+      <td style="font-size:11px;color:var(--muted)">${fc(s.fifty_two_week_high)} / ${fc(s.fifty_two_week_low)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Portfolio ──────────────────────────────────────────────────
+async function loadPortfolio(){
+  const client=document.getElementById('port-client').value.trim();
+  if(!client){alert('Enter a client name');return;}
+  const [detail,holdings,mtm]=await Promise.all([
+    post('stock_app.api.get_client_detail',{client_name:client}),
+    post('stock_app.api.get_holdings',{client_name:client}),
+    post('stock_app.api.get_mtm_positions',{client_name:client})
+  ]);
+  if(detail&&detail.full_name){
+    document.getElementById('port-summary').style.display='grid';
+    document.getElementById('p-val').textContent=fc(detail.portfolio_value);
+    document.getElementById('p-inv').textContent=fc(detail.total_aum);
+    document.getElementById('p-pnl').textContent=fc(detail.total_pnl);
+    document.getElementById('p-cash').textContent=fc(detail.available_cash);
+  }
+  const ht=document.getElementById('holdings-tbody');
+  if(!holdings||!holdings.length){ht.innerHTML='<tr><td colspan="7" class="empty">No holdings</td></tr>';}
+  else ht.innerHTML=holdings.map(h=>{
+    const pnl=h.unrealized_pnl||0; const up=pnl>=0;
+    return `<tr>
+      <td><strong>${h.symbol}</strong></td><td>${h.quantity}</td>
+      <td>${fc(h.avg_cost_price)}</td><td>${fc(h.current_market_price)}</td>
+      <td>${fc(h.mtm_value)}</td>
+      <td class="${up?'up':'down'}">${up?'▲':'▼'} ${fc(Math.abs(pnl))}</td>
+      <td class="${up?'up':'down'}">${fn(h.quantity>0?(pnl/(h.avg_cost_price*h.quantity)*100):0,2)}%</td>
+    </tr>`;
+  }).join('');
+  const mt=document.getElementById('mtm-tbody');
+  if(!mtm||!mtm.length){mt.innerHTML='<tr><td colspan="8" class="empty">No open positions</td></tr>';}
+  else mt.innerHTML=mtm.map(p=>{
+    const pnl=p.unrealized_pnl||0;
+    return `<tr>
+      <td><strong>${p.symbol}</strong></td><td>${p.segment||'—'}</td><td>${p.trade_type||'—'}</td>
+      <td>${p.quantity}</td><td>${fc(p.avg_cost_price)}</td><td>${fc(p.current_market_price)}</td>
+      <td class="${pnl>=0?'up':'down'}">${fc(pnl)}</td>
+      <td><span class="badge ${p.status==='Open'?'badge-green':'badge-gray'}">${p.status||'—'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Margin ─────────────────────────────────────────────────────
+async function loadMarginData(){
+  const calls=await post('stock_app.api.get_margin_calls',{limit:50})||[];
+  const tb=document.getElementById('margin-tbody');
+  if(!calls.length){tb.innerHTML='<tr><td colspan="8" class="empty">No margin data</td></tr>';return;}
+  tb.innerHTML=calls.map(m=>{
+    const util=m.utilization_percent||0;
+    const barCls=util<70?'bar-green':util<85?'bar-amber':'bar-red';
+    const status=util>=85?'<span class="badge badge-red">Critical</span>':util>=70?'<span class="badge badge-amber">Warning</span>':'<span class="badge badge-green">Normal</span>';
+    return `<tr style="${util>=85?'background:rgba(239,68,68,.05)':''}">
+      <td><strong>${m.client_name}</strong></td>
+      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>
+        <div class="util-bar">
+          <div class="bar-wrap"><div class="bar ${barCls}" style="width:${Math.min(util,100)}%"></div></div>
+          ${fn(util,1)}%
+        </div>
+      </td>
+      <td>${status}</td>
+      <td><button class="btn-primary btn-sm" onclick="sendWA('${m.client_name}')">📲 WA</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function sendWA(clientName){
+  const r=await post('stock_app.api.trigger_margin_call_whatsapp',{client_name:clientName});
+  if(r&&r.wa_url) window.open(r.wa_url,'_blank');
+}
+
+// ── Contract Notes ─────────────────────────────────────────────
+async function loadContractNotes(){
+  const params={limit:20};
+  const client=document.getElementById('cn-client')?.value;
+  const status=document.getElementById('cn-status')?.value;
+  const from=document.getElementById('cn-from')?.value;
+  const to=document.getElementById('cn-to')?.value;
+  if(client) params.client_name=client;if(status) params.payment_status=status;
+  if(from) params.date_from=from;if(to) params.date_to=to;
+  const rows=await post('stock_app.api.get_contract_notes',params)||[];
+  const tb=document.getElementById('cn-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="10" class="empty">No contract notes found</td></tr>';return;}
+  tb.innerHTML=rows.map(cn=>`<tr>
+    <td style="font-size:12px">${cn.settlement_number||'—'}</td>
+    <td>${cn.client_name}</td><td>${fdate(cn.contract_date)}</td>
+    <td><span class="badge badge-blue">${cn.exchange||'—'}</span></td>
+    <td>${fc(cn.gross_turnover)}</td><td>${fc(cn.total_charges)}</td>
+    <td style="font-weight:600">${fc(cn.net_payable)}</td>
+    <td>${fdate(cn.due_date)}</td>
+    <td><span class="badge ${statusBadge(cn.payment_status)}">${cn.payment_status||'—'}</span></td>
+    <td><button class="btn-primary btn-sm" onclick="sendCNAlert('${cn.name}')">📲</button></td>
+  </tr>`).join('');
+}
+
+async function sendCNAlert(name){
+  const r=await post('stock_app.api.send_contract_note_alert',{contract_note_name:name});
+  if(r&&r.wa_url) window.open(r.wa_url,'_blank');
+}
+
+// ── Invoices ───────────────────────────────────────────────────
+async function loadInvoices(){
+  const params={limit:20};
+  const status=document.getElementById('inv-status')?.value;
+  if(status) params.payment_status=status;
+  const rows=await post('stock_app.api.get_invoices',params)||[];
+  const tb=document.getElementById('inv-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="8" class="empty">No invoices found</td></tr>';return;}
+  tb.innerHTML=rows.map(i=>`<tr>
+    <td style="font-size:12px">${i.invoice_number||'—'}</td>
+    <td>${i.client_name}</td><td>${fdate(i.invoice_date)}</td>
+    <td>${fc(i.total_amount)}</td><td>${fc(i.total_gst)}</td><td>${fc(i.balance_due)}</td>
+    <td><span class="badge ${statusBadge(i.payment_status)}">${i.payment_status||'—'}</span></td>
+    <td><button class="btn-primary btn-sm">Mark Paid</button></td>
+  </tr>`).join('');
+}
+
+// ── Ledger ─────────────────────────────────────────────────────
+async function loadLedger(){
+  const client=document.getElementById('led-client').value.trim();
+  if(!client){alert('Enter a client name');return;}
+  const from=document.getElementById('led-from')?.value;
+  const to=document.getElementById('led-to')?.value;
+  const params={client_name:client};
+  if(from) params.date_from=from;if(to) params.date_to=to;
+  const rows=await post('stock_app.api.get_ledger',params)||[];
+  const tb=document.getElementById('led-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="6" class="empty">No ledger entries</td></tr>';return;}
+  let balance=0;
+  tb.innerHTML=rows.map(e=>{
+    const cr=e.credit_amount||0; const dr=e.debit_amount||0;
+    balance=e.closing_balance||balance;
+    const balCls=balance>=0?'up':'down';
+    return `<tr>
+      <td>${fdate(e.entry_date)}</td><td>${e.narration||'—'}</td><td style="font-size:11px;color:var(--muted)">${e.reference_number||'—'}</td>
+      <td style="color:var(--red)">${dr>0?fc(dr):'—'}</td>
+      <td style="color:var(--success)">${cr>0?fc(cr):'—'}</td>
+      <td class="${balCls}"><strong>${fc(balance)}</strong></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Alerts ─────────────────────────────────────────────────────
+async function loadAlerts(){
+  const rows=await post('stock_app.api.get_margin_calls',{limit:20})||[];
+  const tb=document.getElementById('alerts-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="8" class="empty">No active alerts</td></tr>';return;}
+  tb.innerHTML=rows.map(m=>`<tr>
+    <td><strong>${m.client_name}</strong></td><td>${m.client_phone||'—'}</td>
+    <td>${fdate(m.call_date)}</td><td style="color:var(--red)">${fc(m.shortfall_amount)}</td>
+    <td>${fn(m.utilization_percent,1)}%</td>
+    <td><span class="badge ${m.whatsapp_sent?'badge-green':'badge-amber'}">${m.whatsapp_sent?'Sent':'Pending'}</span></td>
+    <td><span class="badge ${m.response_received?'badge-green':'badge-gray'}">${m.response_received?m.response_type||'Yes':'No Response'}</span></td>
+    <td><button class="btn-primary btn-sm" onclick="sendWA('${m.client_name}')">📲 WA</button></td>
+  </tr>`).join('');
+}
+
+async function sendMonthlyStatements(){
+  if(!confirm('Send monthly portfolio statements to all active clients via WhatsApp?')) return;
+  const r=await post('stock_app.api.send_monthly_statements',{});
+  alert(r&&r.success?`Statements sent to ${r.sent} clients!`:'Error sending statements');
+}
+
+// ── Settings ───────────────────────────────────────────────────
+async function loadSettings(){
+  const s=await post('stock_app.api.get_settings',{})||{};
+  const fields=['company_name','sebi_registration_number','gstin','pan','phone','email',
+    'whatsapp_number','website','margin_call_threshold_percent','auto_square_off_threshold_percent',
+    'monthly_statement_day','dp_id'];
+  fields.forEach(f=>{const el=document.getElementById('cfg-'+f);if(el) el.value=s[f]||'';});
+}
+
+async function saveSettings(){
+  const fields=['company_name','sebi_registration_number','gstin','pan','phone','email',
+    'whatsapp_number','website','margin_call_threshold_percent','auto_square_off_threshold_percent',
+    'monthly_statement_day','dp_id'];
+  const params={};
+  fields.forEach(f=>{const el=document.getElementById('cfg-'+f);if(el) params[f]=el.value;});
+  const r=await post('stock_app.api.save_settings',params);
+  alert(r&&r.success?'Settings saved!':'Error saving settings');
+}
+
+// ── Init ───────────────────────────────────────────────────────
+function initDashboard(){
+  // Force show dashboard section
+  document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+  const dash=document.getElementById('sec-dashboard');
+  if(dash) dash.style.display='block';
+  // Load data
+  loadDashboard();
+  loadSettings();
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', initDashboard);
+} else {
+  initDashboard();
+}
+</script>
+{% endblock %}

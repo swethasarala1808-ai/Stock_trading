@@ -1,0 +1,285 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "client_pan",
+  "contract_date",
+  "settlement_number",
+  "settlement_type",
+  "exchange",
+  "segment",
+  "sec_break_140434226676608",
+  "total_buy_trades",
+  "total_sell_trades",
+  "total_buy_quantity",
+  "total_sell_quantity",
+  "total_buy_value",
+  "total_sell_value",
+  "gross_turnover",
+  "net_obligation",
+  "net_obligation_type",
+  "sec_break_140434226677184",
+  "brokerage",
+  "stt_buy",
+  "stt_sell",
+  "total_stt",
+  "exchange_transaction_charges",
+  "clearing_charges",
+  "sebi_charges",
+  "stamp_duty",
+  "gst_on_brokerage",
+  "gst_on_charges",
+  "total_gst",
+  "total_charges",
+  "net_payable",
+  "sec_break_140434226678080",
+  "due_date",
+  "payment_status",
+  "payment_date",
+  "pdf_generated",
+  "sent_to_client",
+  "sent_on",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "client_pan",
+   "fieldtype": "Data",
+   "label": "Client PAN"
+  },
+  {
+   "fieldname": "contract_date",
+   "fieldtype": "Date",
+   "label": "Contract Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "settlement_number",
+   "fieldtype": "Data",
+   "label": "Settlement Number",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "settlement_type",
+   "fieldtype": "Select",
+   "label": "Settlement Type",
+   "options": "T+1\nT+2\nT+0"
+  },
+  {
+   "fieldname": "exchange",
+   "fieldtype": "Data",
+   "label": "Exchange",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "segment",
+   "fieldtype": "Data",
+   "label": "Segment"
+  },
+  {
+   "fieldname": "sec_break_140434226676608",
+   "fieldtype": "Section Break",
+   "label": "Trade Summary"
+  },
+  {
+   "fieldname": "total_buy_trades",
+   "fieldtype": "Int",
+   "label": "Buy Trades"
+  },
+  {
+   "fieldname": "total_sell_trades",
+   "fieldtype": "Int",
+   "label": "Sell Trades"
+  },
+  {
+   "fieldname": "total_buy_quantity",
+   "fieldtype": "Int",
+   "label": "Buy Qty"
+  },
+  {
+   "fieldname": "total_sell_quantity",
+   "fieldtype": "Int",
+   "label": "Sell Qty"
+  },
+  {
+   "fieldname": "total_buy_value",
+   "fieldtype": "Currency",
+   "label": "Buy Value"
+  },
+  {
+   "fieldname": "total_sell_value",
+   "fieldtype": "Currency",
+   "label": "Sell Value"
+  },
+  {
+   "fieldname": "gross_turnover",
+   "fieldtype": "Currency",
+   "label": "Gross Turnover"
+  },
+  {
+   "fieldname": "net_obligation",
+   "fieldtype": "Currency",
+   "label": "Net Obligation"
+  },
+  {
+   "fieldname": "net_obligation_type",
+   "fieldtype": "Select",
+   "label": "Obligation Type",
+   "options": "Pay-In\nPay-Out"
+  },
+  {
+   "fieldname": "sec_break_140434226677184",
+   "fieldtype": "Section Break",
+   "label": "Charges"
+  },
+  {
+   "fieldname": "brokerage",
+   "fieldtype": "Currency",
+   "label": "Brokerage"
+  },
+  {
+   "fieldname": "stt_buy",
+   "fieldtype": "Currency",
+   "label": "STT (Buy)"
+  },
+  {
+   "fieldname": "stt_sell",
+   "fieldtype": "Currency",
+   "label": "STT (Sell)"
+  },
+  {
+   "fieldname": "total_stt",
+   "fieldtype": "Currency",
+   "label": "Total STT"
+  },
+  {
+   "fieldname": "exchange_transaction_charges",
+   "fieldtype": "Currency",
+   "label": "Exchange Charges"
+  },
+  {
+   "fieldname": "clearing_charges",
+   "fieldtype": "Currency",
+   "label": "Clearing Charges"
+  },
+  {
+   "fieldname": "sebi_charges",
+   "fieldtype": "Currency",
+   "label": "SEBI Charges"
+  },
+  {
+   "fieldname": "stamp_duty",
+   "fieldtype": "Currency",
+   "label": "Stamp Duty"
+  },
+  {
+   "fieldname": "gst_on_brokerage",
+   "fieldtype": "Currency",
+   "label": "GST on Brokerage"
+  },
+  {
+   "fieldname": "gst_on_charges",
+   "fieldtype": "Currency",
+   "label": "GST on Charges"
+  },
+  {
+   "fieldname": "total_gst",
+   "fieldtype": "Currency",
+   "label": "Total GST"
+  },
+  {
+   "fieldname": "total_charges",
+   "fieldtype": "Currency",
+   "label": "Total Charges"
+  },
+  {
+   "fieldname": "net_payable",
+   "fieldtype": "Currency",
+   "label": "Net Payable",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_break_140434226678080",
+   "fieldtype": "Section Break",
+   "label": "Payment"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due Date"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Pending\nPaid\nOverdue\nWaived",
+   "in_list_view": 1,
+   "default": "Pending"
+  },
+  {
+   "fieldname": "payment_date",
+   "fieldtype": "Date",
+   "label": "Payment Date"
+  },
+  {
+   "fieldname": "pdf_generated",
+   "fieldtype": "Check",
+   "label": "PDF Generated"
+  },
+  {
+   "fieldname": "sent_to_client",
+   "fieldtype": "Check",
+   "label": "Sent to Client"
+  },
+  {
+   "fieldname": "sent_on",
+   "fieldtype": "Datetime",
+   "label": "Sent On"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Contract Note",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SCNT-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}

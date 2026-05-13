@@ -1,0 +1,134 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "client_name",
+  "nominee_name",
+  "relationship",
+  "date_of_birth",
+  "percentage_share",
+  "pan_number",
+  "aadhaar_number",
+  "col_break_140434226630144",
+  "address",
+  "phone",
+  "is_minor",
+  "guardian_name",
+  "guardian_relationship",
+  "guardian_pan",
+  "guardian_address"
+ ],
+ "fields": [
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "nominee_name",
+   "fieldtype": "Data",
+   "label": "Nominee Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "relationship",
+   "fieldtype": "Select",
+   "label": "Relationship",
+   "options": "Spouse\nFather\nMother\nSon\nDaughter\nBrother\nSister\nOther",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "percentage_share",
+   "fieldtype": "Float",
+   "label": "Share %"
+  },
+  {
+   "fieldname": "pan_number",
+   "fieldtype": "Data",
+   "label": "PAN Number"
+  },
+  {
+   "fieldname": "aadhaar_number",
+   "fieldtype": "Data",
+   "label": "Aadhaar Number"
+  },
+  {
+   "fieldname": "col_break_140434226630144",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "is_minor",
+   "fieldtype": "Check",
+   "label": "Is Minor"
+  },
+  {
+   "fieldname": "guardian_name",
+   "fieldtype": "Data",
+   "label": "Guardian Name"
+  },
+  {
+   "fieldname": "guardian_relationship",
+   "fieldtype": "Data",
+   "label": "Guardian Relationship"
+  },
+  {
+   "fieldname": "guardian_pan",
+   "fieldtype": "Data",
+   "label": "Guardian PAN"
+  },
+  {
+   "fieldname": "guardian_address",
+   "fieldtype": "Small Text",
+   "label": "Guardian Address"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brokerage",
+ "name": "Stock Nominee",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "states": [],
+ "autoname": "SNOM-.YYYY.-.#####",
+ "naming_rule": "Expression"
+}
