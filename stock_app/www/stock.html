@@ -498,8 +498,32 @@ footer{background:var(--navy2);color:rgba(255,255,255,.5);padding:48px 16px 24px
             </div>
             <div class="fg">
               <label>Mobile Number <span class="req">*</span></label>
-              <input id="f-phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'');validate('f-phone')">
+              <input id="f-phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'');validate('f-phone');onPhoneInput(this.value)">
               <span class="err-msg" id="err-f-phone">Enter valid 10-digit number</span>
+              <button id="send-otp-btn" onclick="sendOTP(false)" style="display:none;margin-top:8px;width:100%;background:linear-gradient(135deg,#14F1B1,#114EFF);color:#030e1f;border:none;border-radius:8px;padding:10px;font-weight:700;font-size:13px;cursor:pointer">
+                📱 Send OTP to Verify Mobile
+              </button>
+              <div id="otp-section" style="display:none;margin-top:10px;padding:14px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px">
+                <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:8px">📱 Enter OTP sent to your mobile</div>
+                <div style="display:flex;gap:8px;margin-bottom:6px">
+                  <input id="otp-input" type="text" placeholder="• • • • • •" maxlength="6"
+                    style="flex:1;border:1.5px solid #bbf7d0;border-radius:8px;padding:10px 12px;font-size:18px;font-weight:700;letter-spacing:6px;text-align:center;outline:none"
+                    oninput="this.value=this.value.replace(/\D/g,'')">
+                  <button onclick="verifyOTP()" id="verify-otp-btn"
+                    style="background:linear-gradient(135deg,#14F1B1,#114EFF);color:#030e1f;border:none;border-radius:8px;padding:10px 18px;font-weight:700;font-size:13px;cursor:pointer">
+                    Verify ✓
+                  </button>
+                </div>
+                <div id="otp-status" style="font-size:12px;min-height:18px"></div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px">
+                  <span id="otp-timer" style="font-size:11px;color:#6b7280"></span>
+                  <button id="resend-btn" onclick="sendOTP(true)" style="display:none;background:none;border:none;color:#114EFF;font-size:12px;cursor:pointer;font-weight:600;padding:0">Resend OTP</button>
+                </div>
+                <div id="demo-otp-hint" style="display:none;margin-top:8px;padding:8px 10px;background:#dcfce7;border-radius:6px;font-size:12px;font-weight:600;color:#166534;text-align:center"></div>
+              </div>
+              <div id="phone-verified-badge" style="display:none;margin-top:8px;padding:9px 12px;background:#dcfce7;border:1.5px solid #86efac;border-radius:8px;font-size:12px;font-weight:700;color:#166534">
+                ✅ Mobile Number Verified
+              </div>
             </div>
             <div class="fg">
               <label>Email Address <span class="req">*</span></label>
@@ -508,7 +532,13 @@ footer{background:var(--navy2);color:rgba(255,255,255,.5);padding:48px 16px 24px
             </div>
             <div class="fg">
               <label>PAN Number <span class="req">*</span></label>
-              <input id="f-pan" placeholder="ABCDE1234F" maxlength="10" oninput="this.value=this.value.toUpperCase();validate('f-pan')">
+              <div style="display:flex;gap:8px">
+                <input id="f-pan" placeholder="ABCDE1234F" maxlength="10" style="flex:1" oninput="this.value=this.value.toUpperCase();validate('f-pan');if(this.value.length===10)document.getElementById('verify-pan-btn').style.display='inline-block';else document.getElementById('verify-pan-btn').style.display='none'">
+                <button id="verify-pan-btn" onclick="verifyPAN()" style="display:none;background:linear-gradient(135deg,#14F1B1,#114EFF);color:#030e1f;border:none;border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap">
+                  Verify PAN
+                </button>
+              </div>
+              <div id="pan-status" style="font-size:12px;margin-top:4px;min-height:16px"></div>
               <span class="hint">10-character PAN card number</span>
               <span class="err-msg" id="err-f-pan">Enter valid PAN (e.g. ABCDE1234F)</span>
             </div>
@@ -709,7 +739,7 @@ footer{background:var(--navy2);color:rgba(255,255,255,.5);padding:48px 16px 24px
             </div>
             <div class="fg">
               <label>IFSC Code <span class="req">*</span></label>
-              <input id="f-ifsc" placeholder="HDFC0001234" maxlength="11" oninput="this.value=this.value.toUpperCase()">
+              <input id="f-ifsc" placeholder="HDFC0001234" oninput="this.value=this.value.toUpperCase();verifyIFSCLive(this.value)" maxlength="11" oninput="this.value=this.value.toUpperCase()">
               <span class="hint">11-character IFSC code on cheque leaf</span>
             </div>
             <div class="fg">
@@ -973,7 +1003,8 @@ async function submitApplication(){
   const appData={
     full_name:v('f-name'),phone:v('f-phone'),email:v('f-email'),
     pan:v('f-pan'),city:v('f-city'),
-    investment_range:v('f-invest'),goal:v('f-goal'),preferred_time:v('f-calltime'),
+    investment_range:(()=>{const m={'Below ₹1 Lakh':'Below 1L','₹1L – ₹5L':'1L-5L','₹5L – ₹10L':'5L-10L','₹10L – ₹25L':'10L-25L','₹25L – ₹50L':'25L-50L','Above ₹50L':'Above 50L'};return m[v('f-income')]||v('f-income');})(),
+    goal:v('f-goal'),preferred_time:v('f-calltime'),
     notes:`Occupation: ${v('f-occupation')} | Income: ${v('f-income')} | Risk: ${v('f-risk')} | Segment: ${v('f-segment')} | Bank: ${v('f-bank')} | IFSC: ${v('f-ifsc')}`
   };
 
@@ -1013,6 +1044,107 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 
 // ── INIT ───────────────────────────────────────────────────────
 loadStats();
+
+// ════ VERIFICATION SYSTEM (OTP + PAN + IFSC) ════════════════
+
+let phoneVerified = false;
+let panVerified = false;
+let otpCountdown = null;
+
+function onPhoneInput(val){
+  const btn = document.getElementById('send-otp-btn');
+  if(!btn) return;
+  if(val.length === 10 && !phoneVerified) btn.style.display = 'block';
+  else if(val.length < 10) { btn.style.display = 'none'; document.getElementById('otp-section').style.display = 'none'; }
+}
+
+async function sendOTP(isResend){
+  const phone = document.getElementById('f-phone').value;
+  if(phone.length !== 10){ return; }
+  const btn = document.getElementById('send-otp-btn');
+  btn.textContent = 'Sending OTP...'; btn.disabled = true;
+  const r = await api('stock_app.api.send_otp', {phone});
+  btn.style.display = 'none'; btn.disabled = false;
+  document.getElementById('otp-section').style.display = 'block';
+  const status = document.getElementById('otp-status');
+  const hint = document.getElementById('demo-otp-hint');
+  if(r && r.success){
+    status.innerHTML = '<span style="color:#166534">✅ ' + r.message + '</span>';
+    if(r.otp){ hint.style.display='block'; hint.innerHTML='🔧 Demo OTP: <span style="letter-spacing:4px;font-size:15px">'+r.otp+'</span>'; }
+    startTimer(30);
+  } else {
+    status.innerHTML = '<span style="color:#dc2626">❌ '+(r?.error||'Failed')+'</span>';
+  }
+}
+
+function startTimer(secs){
+  const timerEl = document.getElementById('otp-timer');
+  const resend = document.getElementById('resend-btn');
+  resend.style.display = 'none';
+  clearInterval(otpCountdown);
+  otpCountdown = setInterval(()=>{
+    timerEl.textContent = 'Resend in '+secs+'s';
+    secs--;
+    if(secs < 0){ clearInterval(otpCountdown); timerEl.textContent=''; resend.style.display='inline'; }
+  }, 1000);
+}
+
+async function verifyOTP(){
+  const phone = document.getElementById('f-phone').value;
+  const otp = document.getElementById('otp-input').value;
+  if(otp.length !== 6){ document.getElementById('otp-status').innerHTML='<span style="color:#dc2626">Enter 6-digit OTP</span>'; return; }
+  const btn = document.getElementById('verify-otp-btn');
+  btn.textContent='Verifying...'; btn.disabled=true;
+  const r = await api('stock_app.api.verify_otp', {phone, otp});
+  btn.disabled=false;
+  if(r && r.success){
+    phoneVerified = true;
+    clearInterval(otpCountdown);
+    document.getElementById('otp-section').style.display = 'none';
+    document.getElementById('phone-verified-badge').style.display = 'block';
+    document.getElementById('otp-status').innerHTML='';
+  } else {
+    btn.textContent='Verify ✓';
+    document.getElementById('otp-status').innerHTML='<span style="color:#dc2626">❌ '+(r?.error||'Invalid OTP')+'</span>';
+  }
+}
+
+async function verifyPAN(){
+  const pan = document.getElementById('f-pan').value.toUpperCase().trim();
+  const btn = document.getElementById('verify-pan-btn');
+  btn.textContent='Verifying...'; btn.disabled=true;
+  const r = await api('stock_app.api.verify_pan', {pan, dob:''});
+  btn.disabled=false;
+  const status = document.getElementById('pan-status');
+  if(r && r.success && r.verified){
+    panVerified = true;
+    btn.style.display='none';
+    status.innerHTML='<span style="color:#166534;font-weight:700">✅ PAN Verified Successfully</span>';
+  } else {
+    btn.textContent='Verify PAN';
+    status.innerHTML='<span style="color:#dc2626">❌ '+(r?.error||'Verification failed')+'</span>';
+  }
+}
+
+let ifscTimer = null;
+async function verifyIFSCLive(val){
+  clearTimeout(ifscTimer);
+  if(val.length !== 11) return;
+  ifscTimer = setTimeout(async()=>{
+    const r = await api('stock_app.api.verify_bank_ifsc', {ifsc:val});
+    if(r && r.success){
+      const bankEl = document.getElementById('f-bank');
+      if(bankEl && !bankEl.value) bankEl.value = r.bank_name;
+      const ifscEl = document.getElementById('f-ifsc');
+      if(ifscEl) ifscEl.style.borderColor = '#16a34a';
+      let tick = document.getElementById('ifsc-tick');
+      if(!tick){ tick=document.createElement('div'); tick.id='ifsc-tick'; tick.style.cssText='font-size:12px;font-weight:600;color:#166534;margin-top:4px'; ifscEl.parentNode.insertBefore(tick, ifscEl.nextSibling); }
+      tick.innerHTML = '✅ '+r.bank_name+' verified';
+    }
+  }, 500);
+}
+// ════ END VERIFICATION SYSTEM ════════════════════════════════
+
 </script>
 </body>
 </html>
