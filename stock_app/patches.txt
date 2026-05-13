@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 # patches
+=======
+# Patches are executed in order, one per line
+# Format: app.module.patch_name
+# Example: stock_app.patches.v1_0.initial_setup
+>>>>>>> 1d8b324a77ed9333e48a012b11446f488c4a4b47

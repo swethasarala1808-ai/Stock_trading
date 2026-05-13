@@ -1,1 +1,16 @@
+<<<<<<< HEAD
 Brokerage
+=======
+{
+ "color": "#1a56db",
+ "custom_modules": 0,
+ "doctype": "Module Def",
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module_name": "Stock App",
+ "name": "Stock App",
+ "owner": "Administrator",
+ "restrict_to_domain": "",
+ "app_name": "stock_app"
+}
+>>>>>>> 1d8b324a77ed9333e48a012b11446f488c4a4b47

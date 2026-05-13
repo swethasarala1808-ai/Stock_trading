@@ -1,0 +1,172 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "ST-.YYYY.-.MM.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "trade_date",
+  "trade_type",
+  "symbol",
+  "company_name",
+  "column_break_1",
+  "quantity",
+  "price_per_share",
+  "total_amount",
+  "brokerage_fee",
+  "net_amount",
+  "section_break_portfolio",
+  "portfolio",
+  "trader",
+  "notes",
+  "section_break_status",
+  "status",
+  "executed_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "trade_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Trade Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "trade_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Trade Type",
+   "options": "Buy\nSell",
+   "reqd": 1
+  },
+  {
+   "fieldname": "symbol",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Stock Symbol",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantity",
+   "reqd": 1
+  },
+  {
+   "fieldname": "price_per_share",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price per Share",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "brokerage_fee",
+   "fieldtype": "Currency",
+   "label": "Brokerage Fee",
+   "default": "0"
+  },
+  {
+   "fieldname": "net_amount",
+   "fieldtype": "Currency",
+   "label": "Net Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_portfolio",
+   "fieldtype": "Section Break",
+   "label": "Portfolio Details"
+  },
+  {
+   "fieldname": "portfolio",
+   "fieldtype": "Link",
+   "label": "Portfolio",
+   "options": "Stock Portfolio"
+  },
+  {
+   "fieldname": "trader",
+   "fieldtype": "Link",
+   "label": "Trader",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_break_status",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Pending\nExecuted\nCancelled",
+   "default": "Pending"
+  },
+  {
+   "fieldname": "executed_at",
+   "fieldtype": "Datetime",
+   "label": "Executed At"
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Stock App",
+ "name": "Stock Trade",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock Trader",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Portfolio Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "trade_date",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

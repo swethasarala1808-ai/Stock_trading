@@ -1,0 +1,91 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "Stock Settings",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "default_currency",
+  "market_data_provider",
+  "api_key",
+  "column_break_1",
+  "enable_auto_refresh",
+  "refresh_interval_minutes",
+  "section_break_notifications",
+  "enable_email_alerts",
+  "alert_email"
+ ],
+ "fields": [
+  {
+   "fieldname": "default_currency",
+   "fieldtype": "Link",
+   "label": "Default Currency",
+   "options": "Currency",
+   "default": "INR"
+  },
+  {
+   "fieldname": "market_data_provider",
+   "fieldtype": "Select",
+   "label": "Market Data Provider",
+   "options": "Alpha Vantage\nYahoo Finance\nNSE India\nMock (Testing)"
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enable_auto_refresh",
+   "fieldtype": "Check",
+   "label": "Enable Auto Refresh"
+  },
+  {
+   "fieldname": "refresh_interval_minutes",
+   "fieldtype": "Int",
+   "label": "Refresh Interval (Minutes)",
+   "default": "15"
+  },
+  {
+   "fieldname": "section_break_notifications",
+   "fieldtype": "Section Break",
+   "label": "Notifications"
+  },
+  {
+   "fieldname": "enable_email_alerts",
+   "fieldtype": "Check",
+   "label": "Enable Email Alerts"
+  },
+  {
+   "fieldname": "alert_email",
+   "fieldtype": "Data",
+   "label": "Alert Email",
+   "options": "Email"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Stock App",
+ "name": "Stock Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 0,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
