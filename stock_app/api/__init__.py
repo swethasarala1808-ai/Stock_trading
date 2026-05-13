@@ -1,351 +1,301 @@
 import frappe
-from frappe import _
-import json
 
+@frappe.whitelist(allow_guest=True)
+def submit_account_opening(full_name, phone, email="", city="", pan="",
+                            investment_range="", goal="", preferred_time="", notes=""):
+    try:
+        if not full_name or not phone:
+            return {"success": False, "error": "Name and phone are required"}
+        doc = frappe.new_doc("Stock Client")
+        doc.full_name = full_name
+        doc.phone = phone
+        doc.email = email
+        doc.city = city
+        doc.pan_number = pan.upper() if pan else ""
+        doc.annual_income = investment_range
+        doc.account_status = "Application Received"
+        doc.onboarding_date = frappe.utils.today()
+        doc.is_active = 1
+        doc.notes = notes or f"Goal: {goal} | Preferred Time: {preferred_time}"
+        doc.insert(ignore_permissions=True)
+        frappe.db.commit()
+        return {"success": True, "message": "Application received! Our RM will call you within 2 hours."}
+    except Exception as e:
+        frappe.log_error(str(e), "submit_account_opening")
+        return {"success": False, "error": "Something went wrong. Please call us at 040-12345678"}
+
+@frappe.whitelist(allow_guest=True)
+def get_public_stats():
+    try:
+        aum = frappe.db.sql("SELECT IFNULL(SUM(total_aum),0) FROM `tabStock Client` WHERE account_status='Account Active'")[0][0]
+        clients = frappe.db.count("Stock Client", {"account_status": "Account Active"})
+        return {"total_aum": float(aum or 0), "active_clients": clients, "exchanges": 2, "years": 5}
+    except Exception:
+        return {"total_aum": 0, "active_clients": 0, "exchanges": 2, "years": 5}
 
 @frappe.whitelist(allow_guest=False)
 def get_dashboard_stats():
     try:
-        total_clients = frappe.db.count("Stock Client")
-        active_clients = frappe.db.count("Stock Client", {"account_status": "Account Active"})
-        total_aum = frappe.db.sql("SELECT IFNULL(SUM(total_aum),0) FROM `tabStock Client`")[0][0]
         today = frappe.utils.today()
-        orders_today = frappe.db.count("Stock Order", {"order_date": today})
-        executed_today = frappe.db.count("Stock Order", {"order_date": today, "status": "Executed"})
-        today_turnover = frappe.db.sql("SELECT IFNULL(SUM(trade_value),0) FROM `tabStock Trade Book` WHERE trade_date=%s", today)[0][0]
-        pending_kyc = frappe.db.count("Stock KYC", {"kyc_status": ["in", ["Pending","Documents Submitted","Under Review"]]})
-        margin_calls = frappe.db.count("Stock Margin Call", {"response_received": 0})
-        month_start = frappe.utils.get_first_day(today)
-        monthly_brokerage = frappe.db.sql("SELECT IFNULL(SUM(brokerage),0) FROM `tabStock Trade Book` WHERE trade_date>=%s", month_start)[0][0]
-        funds_today = frappe.db.sql("SELECT IFNULL(SUM(amount),0) FROM `tabStock Funds Transfer` WHERE transfer_date=%s AND transfer_type='Funds In' AND status='Completed'", today)[0][0]
-        return {"total_clients": total_clients, "active_clients": active_clients, "total_aum": float(total_aum or 0),
-                "today_turnover": float(today_turnover or 0), "orders_today": orders_today, "executed_today": executed_today,
-                "pending_kyc": pending_kyc, "margin_calls": margin_calls, "monthly_brokerage": float(monthly_brokerage or 0),
-                "funds_collected_today": float(funds_today or 0)}
+        return {
+            "total_clients": frappe.db.count("Stock Client"),
+            "active_clients": frappe.db.count("Stock Client", {"account_status": "Account Active"}),
+            "total_aum": float(frappe.db.sql("SELECT IFNULL(SUM(total_aum),0) FROM `tabStock Client`")[0][0] or 0),
+            "today_turnover": float(frappe.db.sql("SELECT IFNULL(SUM(trade_value),0) FROM `tabStock Trade Book` WHERE trade_date=%s", today)[0][0] or 0),
+            "orders_today": frappe.db.count("Stock Order", {"order_date": today}),
+            "executed_today": frappe.db.count("Stock Order", {"order_date": today, "status": "Executed"}),
+            "pending_kyc": frappe.db.count("Stock Client", {"account_status": ["in", ["Application Received","KYC Pending"]]}),
+            "margin_calls": frappe.db.count("Stock Margin Call", {"response_received": 0}),
+            "monthly_brokerage": float(frappe.db.sql("SELECT IFNULL(SUM(brokerage),0) FROM `tabStock Trade Book` WHERE trade_date>=%s", frappe.utils.get_first_day(today))[0][0] or 0),
+        }
     except Exception as e:
         frappe.log_error(str(e), "get_dashboard_stats")
-        return {"total_clients":0,"active_clients":0,"total_aum":0,"today_turnover":0,"orders_today":0,"executed_today":0,"pending_kyc":0,"margin_calls":0,"monthly_brokerage":0,"funds_collected_today":0}
+        return {"total_clients":0,"active_clients":0,"total_aum":0,"today_turnover":0,
+                "orders_today":0,"executed_today":0,"pending_kyc":0,"margin_calls":0,"monthly_brokerage":0}
 
 @frappe.whitelist(allow_guest=False)
 def get_settings():
     try:
         if not frappe.db.table_exists("tabStock Settings"): return {}
-        doc = frappe.get_single("Stock Settings")
-        return doc.as_dict()
+        return frappe.get_single("Stock Settings").as_dict()
     except Exception: return {}
 
 @frappe.whitelist(allow_guest=False)
 def save_settings(**kwargs):
     try:
         doc = frappe.get_single("Stock Settings")
-        for k,v in kwargs.items():
-            if hasattr(doc,k): setattr(doc,k,v)
+        for k, v in kwargs.items():
+            if hasattr(doc, k): setattr(doc, k, v)
         doc.save(ignore_permissions=True); frappe.db.commit()
         return {"success": True}
     except Exception as e: return {"success": False, "error": str(e)}
 
 @frappe.whitelist(allow_guest=False)
-def get_clients(status=None, kyc_status=None, risk_profile=None, rm=None, search=None, limit=50, start=0):
+def get_clients(status=None, search=None, limit=50, start=0):
     try:
+        if search:
+            return frappe.db.sql(
+                "SELECT name,full_name,phone,email,pan_number,client_type,risk_profile,account_status,relationship_manager,total_aum,portfolio_value,onboarding_date FROM `tabStock Client` WHERE (full_name LIKE %s OR phone LIKE %s OR pan_number LIKE %s) ORDER BY creation DESC LIMIT %s",
+                (f"%{search}%",f"%{search}%",f"%{search}%",int(limit)), as_dict=1)
         filters = {}
         if status: filters["account_status"] = status
-        if risk_profile: filters["risk_profile"] = risk_profile
-        if rm: filters["relationship_manager"] = rm
-        if search:
-            return frappe.db.sql("SELECT name,full_name,phone,email,pan_number,client_type,risk_profile,account_status,relationship_manager,total_aum,portfolio_value FROM `tabStock Client` WHERE (full_name LIKE %s OR phone LIKE %s OR pan_number LIKE %s) ORDER BY creation DESC LIMIT %s OFFSET %s",
-                (f"%{search}%",f"%{search}%",f"%{search}%",int(limit),int(start)),as_dict=1)
-        return frappe.get_all("Stock Client",filters=filters,
-            fields=["name","full_name","phone","email","pan_number","client_type","risk_profile","account_status","relationship_manager","total_aum","portfolio_value"],
-            order_by="creation desc",limit=int(limit),start=int(start))
-    except Exception as e: frappe.log_error(str(e),"get_clients"); return []
+        return frappe.get_all("Stock Client", filters=filters,
+            fields=["name","full_name","phone","email","pan_number","client_type","risk_profile",
+                    "account_status","relationship_manager","total_aum","portfolio_value","onboarding_date"],
+            order_by="creation desc", limit=int(limit))
+    except Exception as e:
+        frappe.log_error(str(e),"get_clients"); return []
 
 @frappe.whitelist(allow_guest=False)
 def get_client_detail(client_name):
-    try: return frappe.get_doc("Stock Client",client_name).as_dict()
+    try: return frappe.get_doc("Stock Client", client_name).as_dict()
     except Exception: return {}
 
 @frappe.whitelist(allow_guest=False)
-def create_client(full_name,phone,email="",pan_number="",client_type="Individual",risk_profile="Moderate"):
+def create_client(full_name, phone, email="", pan_number="", client_type="Individual", risk_profile="Moderate"):
     try:
         doc = frappe.new_doc("Stock Client")
-        doc.full_name=full_name; doc.phone=phone; doc.email=email; doc.pan_number=pan_number
-        doc.client_type=client_type; doc.risk_profile=risk_profile
+        doc.full_name=full_name; doc.phone=phone; doc.email=email
+        doc.pan_number=pan_number; doc.client_type=client_type; doc.risk_profile=risk_profile
         doc.account_status="Application Received"; doc.onboarding_date=frappe.utils.today(); doc.is_active=1
         doc.insert(ignore_permissions=True); frappe.db.commit()
-        return {"success":True,"name":doc.name}
-    except Exception as e: return {"success":False,"error":str(e)}
+        return {"success": True, "name": doc.name}
+    except Exception as e: return {"success": False, "error": str(e)}
 
 @frappe.whitelist(allow_guest=False)
-def update_client_status(client_name,status):
+def update_client_status(client_name, status):
     try:
-        frappe.db.set_value("Stock Client",client_name,"account_status",status); frappe.db.commit()
-        return {"success":True}
-    except Exception as e: return {"success":False,"error":str(e)}
-
-@frappe.whitelist(allow_guest=False)
-def get_activation_checklist(client_name):
-    try:
-        r=frappe.get_all("Stock Account Activation",filters={"client_name":client_name},fields=["*"],limit=1)
-        return r[0] if r else {}
-    except Exception: return {}
+        frappe.db.set_value("Stock Client", client_name, "account_status", status)
+        frappe.db.commit(); return {"success": True}
+    except Exception as e: return {"success": False, "error": str(e)}
 
 @frappe.whitelist(allow_guest=False)
 def get_kyc(client_name):
     try:
-        r=frappe.get_all("Stock KYC",filters={"client_name":client_name},fields=["*"],order_by="creation desc",limit=1)
+        r = frappe.get_all("Stock KYC", filters={"client_name": client_name}, fields=["*"], limit=1)
         return r[0] if r else {}
     except Exception: return {}
 
 @frappe.whitelist(allow_guest=False)
-def update_kyc_status(client_name,kyc_status,remarks=None):
+def get_orders(client_name=None, status=None, date_from=None, date_to=None, segment=None, limit=50):
     try:
-        r=frappe.get_all("Stock KYC",filters={"client_name":client_name},limit=1)
-        if r:
-            doc=frappe.get_doc("Stock KYC",r[0].name); doc.kyc_status=kyc_status
-            if remarks: doc.remarks=remarks
-            if kyc_status=="Verified": doc.verified_by=frappe.session.user; doc.verified_on=frappe.utils.today()
-            doc.save(ignore_permissions=True); frappe.db.commit()
-        return {"success":True}
-    except Exception as e: return {"success":False,"error":str(e)}
-
-@frappe.whitelist(allow_guest=False)
-def get_kyc_documents(client_name):
-    try: return frappe.get_all("Stock KYC Document",filters={"client_name":client_name},fields=["*"],order_by="creation desc")
-    except Exception: return []
-
-@frappe.whitelist(allow_guest=False)
-def get_orders(client_name=None,status=None,date_from=None,date_to=None,segment=None,limit=50):
-    try:
-        filters={}
-        if client_name: filters["client_name"]=client_name
-        if status: filters["status"]=status
-        if segment: filters["segment"]=segment
-        if date_from and date_to: filters["order_date"]=["between",[date_from,date_to]]
-        return frappe.get_all("Stock Order",filters=filters,
-            fields=["name","client_name","order_date","symbol","exchange","order_type","trade_type","quantity","price","status","executed_price","executed_quantity","executed_value"],
-            order_by="order_date desc,creation desc",limit=int(limit))
+        filters = {}
+        if client_name: filters["client_name"] = client_name
+        if status: filters["status"] = status
+        if segment: filters["segment"] = segment
+        if date_from and date_to: filters["order_date"] = ["between",[date_from,date_to]]
+        return frappe.get_all("Stock Order", filters=filters,
+            fields=["name","client_name","order_date","symbol","exchange","segment","order_type",
+                    "trade_type","product_type","quantity","price","status","executed_quantity",
+                    "executed_price","executed_value"],
+            order_by="order_date desc,creation desc", limit=int(limit))
     except Exception as e: frappe.log_error(str(e),"get_orders"); return []
 
 @frappe.whitelist(allow_guest=False)
-def get_trade_book(client_name=None,date_from=None,date_to=None,segment=None,limit=50):
+def place_trade(symbol, trade_type, quantity, price_per_share=0, portfolio_name="", brokerage_fee=20, notes=""):
     try:
-        filters={}
-        if client_name: filters["client_name"]=client_name
-        if segment: filters["segment"]=segment
-        if date_from and date_to: filters["trade_date"]=["between",[date_from,date_to]]
-        return frappe.get_all("Stock Trade Book",filters=filters,
-            fields=["name","client_name","trade_date","symbol","exchange","trade_type","quantity","price","trade_value","total_charges","net_amount","trade_id"],
-            order_by="trade_date desc",limit=int(limit))
+        doc = frappe.new_doc("Stock Order")
+        doc.symbol=symbol; doc.trade_type=trade_type; doc.quantity=int(quantity)
+        doc.price=float(price_per_share); doc.order_type="Market" if float(price_per_share)==0 else "Limit"
+        doc.order_date=frappe.utils.today(); doc.status="Placed"; doc.remarks=notes
+        doc.insert(ignore_permissions=True); frappe.db.commit()
+        return {"success": True, "trade_id": doc.name}
+    except Exception as e: return {"success": False, "error": str(e)}
+
+@frappe.whitelist(allow_guest=False)
+def get_trade_book(client_name=None, date_from=None, date_to=None, segment=None, limit=50):
+    try:
+        filters = {}
+        if client_name: filters["client_name"] = client_name
+        if segment: filters["segment"] = segment
+        if date_from and date_to: filters["trade_date"] = ["between",[date_from,date_to]]
+        return frappe.get_all("Stock Trade Book", filters=filters,
+            fields=["name","client_name","trade_date","symbol","exchange","trade_type","product_type",
+                    "quantity","price","trade_value","brokerage","stt","gst","total_charges","net_amount","trade_id"],
+            order_by="trade_date desc", limit=int(limit))
     except Exception: return []
 
 @frappe.whitelist(allow_guest=False)
-def get_market_watch(sector=None,exchange=None,search=None,limit=50):
+def get_market_watch(sector=None, exchange=None, search=None, limit=50):
     try:
-        filters={"is_active":1}
-        if sector: filters["sector"]=sector
-        if exchange and exchange!="All": filters["exchange"]=exchange
+        filters = {"is_active": 1}
+        if sector: filters["sector"] = sector
+        if exchange and exchange != "All": filters["exchange"] = exchange
         if search:
-            return frappe.db.sql("SELECT name,symbol,company_name,exchange,last_price,day_change,day_change_percent,volume,high_price,low_price,fifty_two_week_high,fifty_two_week_low,sector FROM `tabStock Market Watch` WHERE is_active=1 AND (symbol LIKE %s OR company_name LIKE %s) ORDER BY symbol LIMIT %s",(f"%{search}%",f"%{search}%",int(limit)),as_dict=1)
-        return frappe.get_all("Stock Market Watch",filters=filters,
-            fields=["name","symbol","company_name","exchange","last_price","day_change","day_change_percent","volume","high_price","low_price","fifty_two_week_high","fifty_two_week_low","sector"],
-            order_by="symbol",limit=int(limit))
+            return frappe.db.sql(
+                "SELECT name,symbol,company_name,exchange,last_price,open_price,high_price,low_price,prev_close,day_change,day_change_percent,volume,fifty_two_week_high,fifty_two_week_low,market_cap FROM `tabStock Market Watch` WHERE is_active=1 AND (symbol LIKE %s OR company_name LIKE %s) LIMIT %s",
+                (f"%{search}%",f"%{search}%",int(limit)), as_dict=1)
+        return frappe.get_all("Stock Market Watch", filters=filters,
+            fields=["name","symbol","company_name","exchange","last_price","open_price","high_price",
+                    "low_price","prev_close","day_change","day_change_percent","volume",
+                    "fifty_two_week_high","fifty_two_week_low","market_cap"],
+            order_by="symbol", limit=int(limit))
     except Exception: return []
 
 @frappe.whitelist(allow_guest=False)
-def get_trading_limits(client_name):
+def get_holdings(client_name, instrument_type=None):
     try:
-        r=frappe.get_all("Stock Trading Limit",filters={"client_name":client_name},fields=["*"],order_by="effective_date desc",limit=1)
-        return r[0] if r else {}
-    except Exception: return {}
-
-@frappe.whitelist(allow_guest=False)
-def get_holdings(client_name,instrument_type=None):
-    try:
-        filters={"client_name":client_name,"status":"Open"}
-        if instrument_type: filters["instrument_type"]=instrument_type
-        return frappe.get_all("Stock MTM Position",filters=filters,
-            fields=["symbol","quantity","avg_cost_price","current_market_price","unrealized_pnl","total_pnl","mtm_value","segment"],order_by="symbol")
+        filters = {"client_name": client_name, "status": "Open"}
+        return frappe.get_all("Stock MTM Position", filters=filters,
+            fields=["symbol","quantity","avg_cost_price","current_market_price","unrealized_pnl","total_pnl","mtm_value","segment"])
     except Exception: return []
 
 @frappe.whitelist(allow_guest=False)
-def get_mtm_positions(client_name,date=None):
+def get_mtm_positions(client_name, date=None):
     try:
-        filters={"client_name":client_name}
-        if date: filters["position_date"]=date
-        return frappe.get_all("Stock MTM Position",filters=filters,fields=["*"],order_by="position_date desc")
+        filters = {"client_name": client_name}
+        if date: filters["position_date"] = date
+        return frappe.get_all("Stock MTM Position", filters=filters, fields=["*"], order_by="position_date desc")
     except Exception: return []
 
 @frappe.whitelist(allow_guest=False)
-def get_margin_account(client_name):
+def get_margin_calls(is_resolved=None, limit=20):
     try:
-        r=frappe.get_all("Stock Margin Account",filters={"client_name":client_name},fields=["*"],order_by="margin_date desc",limit=1)
-        return r[0] if r else {}
-    except Exception: return {}
-
-@frappe.whitelist(allow_guest=False)
-def get_margin_calls(is_resolved=None,limit=20):
-    try:
-        filters={}
-        if is_resolved is not None: filters["response_received"]=1 if str(is_resolved)=="1" else 0
-        return frappe.get_all("Stock Margin Call",filters=filters,
-            fields=["name","client_name","client_phone","call_date","shortfall_amount","utilization_percent","whatsapp_sent","response_received","response_type"],
-            order_by="call_date desc",limit=int(limit))
+        filters = {}
+        if is_resolved is not None: filters["response_received"] = 1 if str(is_resolved)=="1" else 0
+        return frappe.get_all("Stock Margin Call", filters=filters,
+            fields=["name","client_name","client_phone","call_date","shortfall_amount",
+                    "utilization_percent","whatsapp_sent","response_received","response_type"],
+            order_by="call_date desc", limit=int(limit))
     except Exception: return []
 
-@frappe.whitelist(allow_guest=False)
-def get_peak_margin(client_name,date_from=None,date_to=None):
-    try:
-        filters={"client_name":client_name}
-        if date_from and date_to: filters["trade_date"]=["between",[date_from,date_to]]
-        return frappe.get_all("Stock Peak Margin",filters=filters,fields=["*"],order_by="trade_date desc")
-    except Exception: return []
-
-def _wa(phone,msg):
+def _wa(phone, msg):
     import urllib.parse
-    phone=str(phone).replace("+91","").replace(" ","").replace("-","")
-    url=f"https://wa.me/91{phone}?text={urllib.parse.quote(msg)}"
-    frappe.log_error(url,"WA"); return url
+    phone = str(phone).replace("+91","").replace(" ","").replace("-","")
+    if not phone.startswith("91"): phone = "91" + phone
+    return f"https://wa.me/{phone}?text={urllib.parse.quote(msg)}"
 
 @frappe.whitelist(allow_guest=False)
 def trigger_margin_call_whatsapp(client_name):
     try:
-        c=frappe.get_all("Stock Client",filters={"full_name":client_name},fields=["phone"],limit=1)
-        phone=c[0].phone if c else ""
-        m=get_margin_account(client_name); s=get_settings()
-        msg=(f"⚠️ *URGENT: Margin Call*\nDear *{client_name}*,\n"
-             f"Margin utilisation: *{float(m.get('margin_utilization_percent',0)):.0f}%*\n"
-             f"Shortfall: *₹{float(m.get('shortfall_amount',0)):,.0f}*\n"
-             f"Add funds immediately to avoid auto square-off.\n"
-             f"*{s.get('company_name','Bizaxl Securities')}* | SEBI: {s.get('sebi_registration_number','INZ000XXXXXX')}")
-        url=_wa(phone,msg)
-        calls=frappe.get_all("Stock Margin Call",filters={"client_name":client_name,"response_received":0},limit=1)
-        if calls: frappe.db.set_value("Stock Margin Call",calls[0].name,"whatsapp_sent",1); frappe.db.commit()
-        return {"success":True,"wa_url":url}
-    except Exception as e: return {"success":False,"error":str(e)}
-
-@frappe.whitelist(allow_guest=False)
-def get_contract_notes(client_name=None,date_from=None,date_to=None,payment_status=None,limit=20):
-    try:
-        filters={}
-        if client_name: filters["client_name"]=client_name
-        if payment_status: filters["payment_status"]=payment_status
-        if date_from and date_to: filters["contract_date"]=["between",[date_from,date_to]]
-        return frappe.get_all("Stock Contract Note",filters=filters,
-            fields=["name","client_name","contract_date","settlement_number","exchange","gross_turnover","total_charges","net_payable","due_date","payment_status","sent_to_client"],
-            order_by="contract_date desc",limit=int(limit))
-    except Exception: return []
-
-@frappe.whitelist(allow_guest=False)
-def get_invoices(client_name=None,payment_status=None,limit=20):
-    try:
-        filters={}
-        if client_name: filters["client_name"]=client_name
-        if payment_status: filters["payment_status"]=payment_status
-        return frappe.get_all("Stock Tax Invoice",filters=filters,
-            fields=["name","client_name","invoice_date","invoice_number","total_amount","total_gst","payment_status","balance_due"],
-            order_by="invoice_date desc",limit=int(limit))
-    except Exception: return []
-
-@frappe.whitelist(allow_guest=False)
-def get_ledger(client_name,date_from=None,date_to=None,limit=50):
-    try:
-        filters={"client_name":client_name}
-        if date_from and date_to: filters["entry_date"]=["between",[date_from,date_to]]
-        return frappe.get_all("Stock Ledger Entry",filters=filters,
-            fields=["name","entry_date","narration","entry_type","debit_amount","credit_amount","closing_balance","reference_number"],
-            order_by="entry_date desc",limit=int(limit))
-    except Exception: return []
-
-@frappe.whitelist(allow_guest=False)
-def get_dp_charges(client_name,date_from=None,date_to=None,limit=20):
-    try:
-        filters={"client_name":client_name}
-        if date_from and date_to: filters["charge_date"]=["between",[date_from,date_to]]
-        return frappe.get_all("Stock DP Charge",filters=filters,fields=["*"],order_by="charge_date desc",limit=int(limit))
-    except Exception: return []
-
-@frappe.whitelist(allow_guest=False)
-def send_monthly_statements():
-    try:
-        s=get_settings(); company=s.get("company_name","Bizaxl Securities"); sebi=s.get("sebi_registration_number","INZ000XXXXXX")
-        import calendar; from datetime import datetime; now=datetime.now(); month=calendar.month_name[now.month]
-        clients=frappe.get_all("Stock Client",filters={"account_status":"Account Active"},fields=["full_name","phone","portfolio_value","total_aum","total_pnl","available_cash"])
-        sent=0
-        for c in clients:
-            pnl=float(c.total_pnl or 0); sign="+" if pnl>=0 else "-"; pct=(abs(pnl)/float(c.total_aum or 1)*100) if c.total_aum else 0
-            msg=(f"📊 *Monthly Statement — {month} {now.year}*\nDear *{c.full_name}*,\nYour portfolio summary:\n"
-                 f"💼 Portfolio Value: *₹{float(c.portfolio_value or 0):,.0f}*\n💰 Total Invested: *₹{float(c.total_aum or 0):,.0f}*\n"
-                 f"📈 Total P&L: *{sign}₹{abs(pnl):,.0f}* ({pct:.1f}%)\n💵 Available Funds: *₹{float(c.available_cash or 0):,.0f}*\n"
-                 f"For full statement login to portal.\n*{company}* | SEBI: {sebi}")
-            _wa(c.phone,msg); sent+=1
-        return {"success":True,"sent":sent}
-    except Exception as e: return {"success":False,"error":str(e)}
+        c = frappe.get_all("Stock Client", filters={"full_name": client_name}, fields=["phone"], limit=1)
+        phone = c[0].phone if c else ""
+        s = get_settings()
+        msg = f"⚠️ *URGENT: Margin Call*\nDear *{client_name}*,\nYour margin utilisation has crossed the threshold.\nPlease add funds immediately to avoid auto square-off.\n📞 {s.get('phone','')}\n*{s.get('company_name','Bizaxl Securities')}*"
+        url = _wa(phone, msg)
+        calls = frappe.get_all("Stock Margin Call", filters={"client_name": client_name, "response_received": 0}, limit=1)
+        if calls: frappe.db.set_value("Stock Margin Call", calls[0].name, "whatsapp_sent", 1); frappe.db.commit()
+        return {"success": True, "wa_url": url}
+    except Exception as e: return {"success": False, "error": str(e)}
 
 @frappe.whitelist(allow_guest=False)
 def send_trade_confirmation(trade_id):
     try:
-        t=frappe.get_doc("Stock Trade Book",trade_id); s=get_settings()
-        c=frappe.get_all("Stock Client",filters={"full_name":t.client_name},fields=["phone"],limit=1)
-        phone=c[0].phone if c else ""
-        msg=(f"✅ *Trade Confirmed!*\nDear *{t.client_name}*,\n{t.trade_type}: *{t.quantity} shares* of *{t.symbol}*\n"
-             f"Price: ₹{float(t.price or 0):,.2f} | Value: *₹{float(t.trade_value or 0):,.0f}*\n"
-             f"Charges: ₹{float(t.total_charges or 0):,.2f} | Net: ₹{float(t.net_amount or 0):,.0f}\n"
-             f"Trade ID: {t.trade_id or t.name} | {t.exchange}\n*{s.get('company_name','Bizaxl Securities')}*")
-        return {"success":True,"wa_url":_wa(phone,msg)}
-    except Exception as e: return {"success":False,"error":str(e)}
-
-@frappe.whitelist(allow_guest=False)
-def send_margin_call_alert(client_name): return trigger_margin_call_whatsapp(client_name)
+        t = frappe.get_doc("Stock Trade Book", trade_id); s = get_settings()
+        c = frappe.get_all("Stock Client", filters={"full_name": t.client_name}, fields=["phone"], limit=1)
+        phone = c[0].phone if c else ""
+        msg = f"✅ *Trade Confirmed!*\nDear *{t.client_name}*,\n{t.trade_type}: *{t.quantity} shares* of *{t.symbol}*\nPrice: ₹{float(t.price or 0):,.2f} | Net: ₹{float(t.net_amount or 0):,.0f}\nTrade ID: {t.trade_id or t.name}\n*{s.get('company_name','Bizaxl Securities')}*"
+        return {"success": True, "wa_url": _wa(phone, msg)}
+    except Exception as e: return {"success": False, "error": str(e)}
 
 @frappe.whitelist(allow_guest=False)
 def send_contract_note_alert(contract_note_name):
     try:
-        cn=frappe.get_doc("Stock Contract Note",contract_note_name); s=get_settings()
-        c=frappe.get_all("Stock Client",filters={"full_name":cn.client_name},fields=["phone"],limit=1)
-        phone=c[0].phone if c else ""
-        msg=(f"📄 *Contract Note Ready — {cn.settlement_number}*\nDear *{cn.client_name}*,\n"
-             f"Date: {cn.contract_date} | Exchange: {cn.exchange}\n"
-             f"Turnover: ₹{float(cn.gross_turnover or 0):,.0f} | Charges: ₹{float(cn.total_charges or 0):,.0f}\n"
-             f"Net: *₹{float(cn.net_payable or 0):,.0f}* ({cn.net_obligation_type})\nDue: {cn.due_date}\n*{s.get('company_name','Bizaxl Securities')}*")
-        frappe.db.set_value("Stock Contract Note",contract_note_name,"sent_to_client",1); frappe.db.commit()
-        return {"success":True,"wa_url":_wa(phone,msg)}
-    except Exception as e: return {"success":False,"error":str(e)}
+        cn = frappe.get_doc("Stock Contract Note", contract_note_name); s = get_settings()
+        c = frappe.get_all("Stock Client", filters={"full_name": cn.client_name}, fields=["phone"], limit=1)
+        phone = c[0].phone if c else ""
+        msg = f"📄 *Contract Note — {cn.settlement_number}*\nDear *{cn.client_name}*,\nDate: {cn.contract_date} | Exchange: {cn.exchange}\nNet: *₹{float(cn.net_payable or 0):,.0f}*\n*{s.get('company_name','Bizaxl Securities')}*"
+        frappe.db.set_value("Stock Contract Note", contract_note_name, "sent_to_client", 1); frappe.db.commit()
+        return {"success": True, "wa_url": _wa(phone, msg)}
+    except Exception as e: return {"success": False, "error": str(e)}
 
 @frappe.whitelist(allow_guest=False)
 def send_kyc_expiry_reminder(client_name):
     try:
-        k=frappe.get_all("Stock KYC",filters={"client_name":client_name},fields=["expiry_date"],limit=1)
-        expiry=k[0].expiry_date if k else "N/A"; s=get_settings()
-        c=frappe.get_all("Stock Client",filters={"full_name":client_name},fields=["phone","relationship_manager"],limit=1)
-        phone=c[0].phone if c else ""; rm_phone=""
-        if c and c[0].relationship_manager:
-            rm=frappe.get_all("Stock Relationship Manager",filters={"rm_name":c[0].relationship_manager},fields=["phone"],limit=1)
-            if rm: rm_phone=rm[0].phone
-        msg=(f"📋 *KYC Renewal Required*\nDear *{client_name}*, KYC expires on *{expiry}*.\n"
-             f"Update documents to continue trading.\nContact: {rm_phone}\n*{s.get('company_name','Bizaxl Securities')}*")
-        return {"success":True,"wa_url":_wa(phone,msg)}
-    except Exception as e: return {"success":False,"error":str(e)}
+        s = get_settings()
+        c = frappe.get_all("Stock Client", filters={"full_name": client_name}, fields=["phone"], limit=1)
+        phone = c[0].phone if c else ""
+        msg = f"📋 *KYC Renewal Required*\nDear *{client_name}*, please update your KYC documents.\n📞 {s.get('phone','')}\n*{s.get('company_name','Bizaxl Securities')}*"
+        return {"success": True, "wa_url": _wa(phone, msg)}
+    except Exception as e: return {"success": False, "error": str(e)}
 
-@frappe.whitelist(allow_guest=True)
-def submit_account_opening(full_name,phone,email="",city="",pan="",investment_range="",goal="",preferred_time=""):
+@frappe.whitelist(allow_guest=False)
+def send_monthly_statements():
     try:
-        doc=frappe.new_doc("Stock Client"); doc.full_name=full_name; doc.phone=phone; doc.email=email
-        doc.city=city; doc.pan_number=pan; doc.annual_income=investment_range
-        doc.account_status="Application Received"; doc.onboarding_date=frappe.utils.today(); doc.is_active=1
-        doc.notes=f"Goal: {goal} | Preferred Time: {preferred_time}"
-        doc.insert(ignore_permissions=True); frappe.db.commit()
-        s=get_settings(); wa_num=s.get("whatsapp_number","")
-        if wa_num:
-            import urllib.parse
-            msg=f"🎉 New Application!\nName: {full_name}\nPhone: {phone}\nPAN: {pan}\nCity: {city}\nGoal: {goal}"
-            frappe.log_error(f"https://wa.me/91{wa_num}?text={urllib.parse.quote(msg)}","WA")
-        return {"success":True,"message":"Application received! Our team will contact you within 24 hours."}
-    except Exception as e: return {"success":False,"error":"Something went wrong. Please try again."}
+        s = get_settings(); company = s.get("company_name","Bizaxl Securities")
+        import calendar; from datetime import datetime; now = datetime.now(); month = calendar.month_name[now.month]
+        clients = frappe.get_all("Stock Client", filters={"account_status":"Account Active"},
+            fields=["full_name","phone","portfolio_value","total_aum","total_pnl","available_cash"])
+        sent = 0
+        for c in clients:
+            pnl = float(c.total_pnl or 0); sign = "+" if pnl>=0 else "-"
+            msg = f"📊 *Monthly Statement — {month} {now.year}*\nDear *{c.full_name}*,\n💼 Portfolio: *₹{float(c.portfolio_value or 0):,.0f}*\n📈 P&L: *{sign}₹{abs(pnl):,.0f}*\n💵 Cash: *₹{float(c.available_cash or 0):,.0f}*\n*{company}*"
+            _wa(c.phone, msg); sent += 1
+        return {"success": True, "sent": sent}
+    except Exception as e: return {"success": False, "error": str(e)}
 
-@frappe.whitelist(allow_guest=True)
-def get_public_stats():
+@frappe.whitelist(allow_guest=False)
+def get_contract_notes(client_name=None, date_from=None, date_to=None, payment_status=None, limit=20):
     try:
-        aum=frappe.db.sql("SELECT IFNULL(SUM(total_aum),0) FROM `tabStock Client` WHERE account_status='Account Active'")[0][0]
-        clients=frappe.db.count("Stock Client",{"account_status":"Account Active"})
-        return {"total_aum":float(aum or 0),"active_clients":clients,"exchanges":2,"years":5}
-    except Exception: return {"total_aum":0,"active_clients":0,"exchanges":2,"years":5}
+        filters = {}
+        if client_name: filters["client_name"] = client_name
+        if payment_status: filters["payment_status"] = payment_status
+        if date_from and date_to: filters["contract_date"] = ["between",[date_from,date_to]]
+        return frappe.get_all("Stock Contract Note", filters=filters,
+            fields=["name","client_name","contract_date","settlement_number","settlement_type","exchange",
+                    "gross_turnover","brokerage","total_stt","total_gst","total_charges","net_payable","due_date","payment_status"],
+            order_by="contract_date desc", limit=int(limit))
+    except Exception: return []
+
+@frappe.whitelist(allow_guest=False)
+def get_invoices(client_name=None, payment_status=None, limit=20):
+    try:
+        filters = {}
+        if client_name: filters["client_name"] = client_name
+        if payment_status: filters["payment_status"] = payment_status
+        return frappe.get_all("Stock Tax Invoice", filters=filters,
+            fields=["name","client_name","invoice_date","invoice_number","subtotal","total_amount",
+                    "cgst_amount","sgst_amount","igst_amount","total_gst","payment_status","balance_due"],
+            order_by="invoice_date desc", limit=int(limit))
+    except Exception: return []
+
+@frappe.whitelist(allow_guest=False)
+def get_ledger(client_name, date_from=None, date_to=None, limit=50):
+    try:
+        filters = {"client_name": client_name}
+        if date_from and date_to: filters["entry_date"] = ["between",[date_from,date_to]]
+        return frappe.get_all("Stock Ledger Entry", filters=filters,
+            fields=["name","entry_date","value_date","narration","entry_type","segment",
+                    "debit_amount","credit_amount","closing_balance","reference_number"],
+            order_by="entry_date desc", limit=int(limit))
+    except Exception: return []
